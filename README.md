@@ -7,4 +7,4 @@ vagran ssh
 2) Set up virtual environment
 mkvirtualenv water_watch_service --python=python3
 pip install django==1.11
-pip install djangorestframework==3.6
+pip install djangorestframework==3.6.2
