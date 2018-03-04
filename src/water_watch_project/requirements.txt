@@ -1,0 +1,4 @@
+Django==1.11
+djangorestframework==3.6.2
+psycopg2==2.7.4
+pytz==2018.3
