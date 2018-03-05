@@ -7,6 +7,7 @@ This is a private repo. for CmpE 281
 ##2) In VM, set up virtual environment and install these packages
  pip install django==1.11  
  pip install djangorestframework==3.6.2  
+ pip install django-model-utils==3.1.1
 ##3) In VM, set up PostgreSQL
   sudo apt install postgresql postgresql-contrib  
 

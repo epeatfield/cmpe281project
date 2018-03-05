@@ -24,6 +24,8 @@ class Sensor(models.Model):
     station = models.ForeignKey(Station, on_delete=models.CASCADE)
     sensor_type = models.ForeignKey(SensorType, on_delete=models.CASCADE)
     current_status = models.CharField(max_length=15, choices=STATUS_CHOICES, default=ACTIVE)
+    def __str__(self):
+        return self.station.natural_key() + '-' + self.sensor_type.natural_key()
 
     def natural_key(self):
         return (self.station.natural_key(), self.sensor_type.natural_key())
