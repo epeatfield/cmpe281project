@@ -1,10 +1,14 @@
 from django.db import models
 
+class StationManager(models.Manager):
+    def get_by_natural_key(self, station_name):
+        return self.get(station_name=station_name)
 
 class Station(models.Model):
     class Meta:
         db_table = 'station'
         ordering = ['station_name']
+    objects = StationManager()
     usgs_site_code = models.CharField(max_length=20)
     station_name = models.CharField(max_length=255, unique=True)
     us_state_cd = models.CharField(max_length=2)
@@ -13,4 +17,6 @@ class Station(models.Model):
 
     REQUIRED_FIELDS = ('station_name', 'us_state_cd', 'longitute', 'latitute')
     def __str__(self):
+        return self.station_name
+    def natural_key(self):
         return self.station_name

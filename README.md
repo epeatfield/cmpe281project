@@ -16,13 +16,19 @@ This is a private repo. for CmpE 281
 
   sudo -u postgres createdb waterwatch -O waterwatchadmin  
   pip install psycopg2  
+  Tutorial video: https://youtu.be/wYqiEUlJrBA
 ##4) In VM, migrate db
 Create admin/superuser for Django admin (one time only):
   python manage.py createsuperuser  
 
-Every time we make a update/create new models run these commands:  
+###Every time we make a update/create new models run these commands:  
+###However, since Thy is working on the models, and she committed the migrations file, so you might not need to run makemigrations command AT THE FIRST TIME SET UP THE PROJECT, simply run migrate to avoid conflicts. If conflicts happen, make your migration files local file, don't commit yours.
+
+###If you are going to change the models, then run makemigrations
+
   python manage.py makemigrations  
   python manage.py migrate  
+
 ##5) In VM, run server
   python manage.py runserver 0.0.0.0:8080   
 
