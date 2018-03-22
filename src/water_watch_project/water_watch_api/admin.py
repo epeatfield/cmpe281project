@@ -1,6 +1,8 @@
 from django.contrib import admin
-from django.contrib.admin import DateFieldListFilter
+#from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin import ModelAdmin
+from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
+
 
 from . import models
 
@@ -30,7 +32,7 @@ class SensorTypeAdmin(admin.ModelAdmin):
 class SensorDataAdmin(admin.ModelAdmin):
 
     list_display = ('id', 'sensor', 'sensor_data_dateTime', 'sensor_data_value')
-    list_filter = ('sensor__station__station_name', 'sensor__sensor_type__sensor_type_name', ('sensor_data_dateTime', DateFieldListFilter),)
+    list_filter = ('sensor__station__station_name', 'sensor__sensor_type__sensor_type_name', ('sensor_data_dateTime', DateTimeRangeFilter),)
     search_fields = ('sensor__station__station_name', 'sensor_data_value','sensor__sensor_type__sensor_type_name')
     list_per_page = 10
 
