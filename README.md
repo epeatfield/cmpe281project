@@ -34,3 +34,8 @@ Create admin/superuser for Django admin (one time only):
   python manage.py runserver 0.0.0.0:8080   
 
 ##6) Django admin - localhost:8082/admin
+
+##7) Creating a Date Time Range Filter
+  pip install django-admin-rangefilter
+
+  Make sure 'rangefilter' is added to INSTALLED_APPS in settings.py
