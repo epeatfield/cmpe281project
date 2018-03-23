@@ -1,5 +1,4 @@
 from django.contrib import admin
-#from django.contrib.admin import DateFieldListFilter
 from django.contrib.admin import ModelAdmin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 
@@ -11,21 +10,75 @@ from . import models
 
 class StationAdmin(admin.ModelAdmin):
 
+    actions = ['download_csv']
     list_filter = ['us_state_cd']
     list_display = ('id', 'station_name', 'us_state_cd', 'longitude', 'latitude')
+    def download_csv(self, request, queryset):
+        import csv
+        from django.http import HttpResponse
+        import StringIO
+        f = StringIO.StringIO()
+        writer = csv.writer(f)
+        writer.writerow(["id","station","state","longitude","latitude"])
+
+        for s in queryset:
+            writer.writerow([s.usgs_site_code, s.station_name, s.us_state_cd, s.longitude, s.latitude])
+
+        f.seek(0)
+        response = HttpResponse(f, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=station-type.csv'
+        return response
+
+    download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('id', 'station_name', 'us_state_cd',)
     list_per_page = 5
 
 class SensorAdmin(admin.ModelAdmin):
 
+    actions = ['download_csv']
     list_filter = ('current_status', 'station__station_name', 'sensor_type__sensor_type_name')
     list_display = ('id', 'station', 'sensor_type', 'current_status')
+    def download_csv(self, request, queryset):
+        import csv
+        from django.http import HttpResponse
+        import StringIO
+        f = StringIO.StringIO()
+        writer = csv.writer(f)
+        writer.writerow(["id","station","sensor","status"])
+
+        for s in queryset:
+            writer.writerow([s.id, s.station, s.sensor_type, s.current_status])
+
+        f.seek(0)
+        response = HttpResponse(f, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=sensor.csv'
+        return response
+
+    download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('station__station_name', 'sensor_type__sensor_type_name','current_status',)
     list_per_page = 5
 
 class SensorTypeAdmin(admin.ModelAdmin):
 
+    actions = ['download_csv']
     list_display = ('id', 'sensor_type_name', 'description', 'unit')
+    def download_csv(self, request, queryset):
+        import csv
+        from django.http import HttpResponse
+        import StringIO
+        f = StringIO.StringIO()
+        writer = csv.writer(f)
+        writer.writerow(["id","sensor","description","unit"])
+
+        for s in queryset:
+            writer.writerow([s.id, s.sensor_type_name, s.description, s.unit])
+
+        f.seek(0)
+        response = HttpResponse(f, content_type='text/csv')
+        response['Content-Disposition'] = 'attachment; filename=sensor-type.csv'
+        return response
+
+    download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('sensor_type_name',)
     list_per_page = 5
 
