@@ -3,7 +3,7 @@ This is a private repo. for CmpE 281
 
 ##1) Set up virtual machine
  vagrant up  
- vagran ssh  
+ vagrant ssh  
 ##2) In VM, set up virtual environment and install these packages
  pip install django==1.11  
  pip install djangorestframework==3.6.2  
