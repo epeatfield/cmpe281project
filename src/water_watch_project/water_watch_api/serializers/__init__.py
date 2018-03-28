@@ -1,0 +1,1 @@
+from water_watch_api.serializers.sensor_data_serializer import SensorDataListSerializer

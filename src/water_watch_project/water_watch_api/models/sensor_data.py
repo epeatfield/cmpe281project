@@ -12,6 +12,5 @@ class SensorData(models.Model):
     sensor_data_dateTime = models.DateTimeField()
     sensor_data_value = models.DecimalField(max_digits=20, decimal_places=3)
 
-
     def __str__(self):
         return str(self.sensor) + '-' + str(self.sensor_data_value) + '-' + str(self.sensor_data_dateTime)
