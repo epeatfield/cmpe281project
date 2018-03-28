@@ -23,11 +23,12 @@ Create admin/superuser for Django admin (one time only):
   python manage.py createsuperuser  
 
 ###Every time we make a update/create new models run these commands:  
-###However, since Thy is working on the models, and she committed the migrations file, so you might not need to run makemigrations command AT THE FIRST TIME SET UP THE PROJECT, simply run migrate to avoid conflicts. If conflicts happen, make your migration files local file, don't commit yours.
+###However, since Thy is working on the models, and she committed the migrations file, 
+###so you might not need to run makemigrations command AT THE FIRST TIME SET UP THE PROJECT, simply run migrate to avoid conflicts. If conflicts happen, make your migration files local file, don't commit yours.
 
 ###If you are going to change the models, then run makemigrations
 
-  python manage.py makemigrations  
+  python manage.py makemigrations (DO NOT RUN THIS COMMAND IF YOU INITIALLY SET UP OR DO NOT MAKE ANY CHANGE ON THE MODELS)  
   python manage.py migrate  
 
 ##5) In VM, run server
