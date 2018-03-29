@@ -1,1 +1,2 @@
-from water_watch_api.serializers.sensor_data_serializer import SensorDataListSerializer
+from water_watch_api.serializers.sensor_data_serializer import SensorDataSerializer
+from water_watch_api.serializers.sensor_type_serializer import SensorTypeSerializer

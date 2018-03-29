@@ -19,7 +19,7 @@ class StationAdmin(admin.ModelAdmin):
         import StringIO
         f = StringIO.StringIO()
         writer = csv.writer(f)
-        writer.writerow(["id","station","state","longitude","latitude"])
+        writer.writerow(["id", "station", "state", "longitude", "latitude"])
 
         for s in queryset:
             writer.writerow([s.usgs_site_code, s.station_name, s.us_state_cd, s.longitude, s.latitude])
@@ -33,11 +33,13 @@ class StationAdmin(admin.ModelAdmin):
     search_fields = ('id', 'station_name', 'us_state_cd',)
     list_per_page = 5
 
+
 class SensorAdmin(admin.ModelAdmin):
 
     actions = ['download_csv']
     list_filter = ('current_status', 'station__station_name', 'sensor_type__sensor_type_name')
     list_display = ('id', 'station', 'sensor_type', 'current_status')
+
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
