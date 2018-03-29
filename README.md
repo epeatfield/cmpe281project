@@ -50,25 +50,25 @@ Create admin/superuser for Django admin (one time only):
   This package will help us to add filter on search GET request, for example search sensor data by min value and max value: 
   http://localhost:8082/sensor_data/?min_value=10&max_value=10.6
   
-  Document: https://django-filter.readthedocs.io/en/master/guide/rest_framework.html </br>
-  FUN FACTS (but annoying): the name of pakcage is "django-filter", but you will import "django-filters" </br>
-  And in settings.py, you have to put "django-filters" on top fo the INSTALLED_APPS list. If you put it somewhere else, this package will not be loaded. </br>
-  Still don't know why, but it seems to be conflicted with other packages if you do not put it in the right order. Anyway, the problem is fixed. </br>
-  This stupid thing wasted a lot of my time to figure out :D </br>
+  Document: https://django-filter.readthedocs.io/en/master/guide/rest_framework.html 
+  FUN FACTS (but annoying): the name of pakcage is "django-filter", but you will import "django-filters" 
+  And in settings.py, you have to put "django-filters" on top fo the INSTALLED_APPS list. If you put it somewhere else, this package will not be loaded. 
+  Still don't know why, but it seems to be conflicted with other packages if you do not put it in the right order. Anyway, the problem is fixed. 
+  This stupid thing wasted a lot of my time to figure out :D 
   
   See SensorDataFilter in sensor_data_view.py for more information.
   
 ##9) EXPLANATION on how to split models and views to multiple files
-  As I said from the begining, Django put all the model classes in one single file named models.py, all the viewapi, viewset, etc classes in one single file named views.py </br>
+  As I said from the begining, Django put all the model classes in one single file named models.py, all the viewapi, viewset, etc classes in one single file named views.py 
   And of course all the serializer classes in one single file named serializers.py
   
-  Each of us will handle one set of models and apis, therefore, if we use the same file, conflict will happen a lot. </br>
-  Therefore, I re-organize the structure so that we can work independently. </br>
-  At the moment, all the model classes are inside models folder, all the view classes are inside views folder, and all the serializers classes are inside serializer folder. </br>
-  This change will not affect how you import a class. For example: from ..models import SensorData => this works for both cases (no matter what one single file or mulitple files for model) </br>
+  Each of us will handle one set of models and apis, therefore, if we use the same file, conflict will happen a lot. 
+  Therefore, I re-organize the structure so that we can work independently. 
+  At the moment, all the model classes are inside models folder, all the view classes are inside views folder, and all the serializers classes are inside serializer folder. 
+  This change will not affect how you import a class. For example: from ..models import SensorData => this works for both cases (no matter what one single file or mulitple files for model) 
   Document: https://simpleisbetterthancomplex.com/tutorial/2016/08/02/how-to-split-views-into-multiple-files.html
   
-  What will happen when you add an new model class or view model class or serializer class. Goto \_\_init__.py of the corresponding folder and import your newly created class. </br>
+  What will happen when you add an new model class or view model class or serializer class. Goto \_\_init__.py of the corresponding folder and import your newly created class. 
   For example: I create new serialier class named SensorDataSerializer, this is what I add to serializers/\_\_init.py: from water_watch_api.serializers.sensor_data_serializer import SensorDataSerializer
   
 ##10) EXPLANATION on BATCH INSERT:
@@ -80,12 +80,12 @@ Create admin/superuser for Django admin (one time only):
   For other tables such as Staion, Sensor Type, Sensor -> the data records are limited in number, so we might not need the BATCH INSERT.
   
 ##11) Who is responsible for what apis? 
-  I put the details here: https://docs.google.com/document/d/1zM4_vTjfsNixK8qcU0VyWiBuvwzj3qCV5-pNMFH0qRc/edit </br>
-  I also put comments inside the \*\_view.py files, please read to get the ideas. And also please refer to our analysis document.</br>
-  If you have any question please let me know.</br>
+  I put the details here: https://docs.google.com/document/d/1zM4_vTjfsNixK8qcU0VyWiBuvwzj3qCV5-pNMFH0qRc/edit 
+  I also put comments inside the \*\_view.py files, please read to get the ideas. And also please refer to our analysis document.
+  If you have any question please let me know.
     
-  The sample codes are made fully for SensorType and partly for SensorData.</br>
-  Please read more to understand the differences between retrieve one single record or list all the data based on some filters. </br>
-  Read more about Generics API view - the one we use in our project: http://www.django-rest-framework.org/api-guide/generic-views/</br>
+  The sample codes are made fully for SensorType and partly for SensorData.
+  Please read more to understand the differences between retrieve one single record or list all the data based on some filters. 
+  Read more about Generics API view - the one we use in our project: http://www.django-rest-framework.org/api-guide/generic-views/
   Remember to add urlPattern to your new apis.
   
