@@ -83,7 +83,7 @@ Create admin/superuser for Django admin (one time only):
   I put the details here: https://docs.google.com/document/d/1zM4_vTjfsNixK8qcU0VyWiBuvwzj3qCV5-pNMFH0qRc/edit
   I also put comments inside the \*\_view.py files, please read to get the ideas. And also please refer to our analysis document.
   If you have any question please let me know.
-  
+    
   The sample codes are made fully for SensorType and partly for SensorData.
   Please read more to understand the differences between retrieve one single record or list all the data based on some filters. 
   And Please read more about Generics API view - the one we use in our project: http://www.django-rest-framework.org/api-guide/generic-views/
