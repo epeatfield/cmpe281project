@@ -11,7 +11,6 @@ https://docs.djangoproject.com/en/1.11/ref/settings/
 """
 
 import os
-import django_filters
 
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
@@ -92,7 +91,7 @@ WSGI_APPLICATION = 'water_watch_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'waterwatch',
+        'NAME': 'waterwatch_dump',
         'USER': 'waterwatchadmin',
         'PASSWORD': 'khongcopw', #replace your own pw
         'HOST': 'localhost',

@@ -92,9 +92,9 @@ class SensorDataAdmin(admin.ModelAdmin):
         #None
         import csv
         from django.http import HttpResponse
-        import StringIO
+        import io
 
-        f = StringIO.StringIO()
+        f = io.StringIO()
         writer = csv.writer(f)
         writer.writerow(["id","sensor","sensor date","sensor value"])
 
