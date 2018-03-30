@@ -89,3 +89,6 @@ Create admin/superuser for Django admin (one time only):
   Read more about Generics API view - the one we use in our project: http://www.django-rest-framework.org/api-guide/generic-views/
   Remember to add urlPattern to your new apis.
   
+##12) One year of real data for 5 stations, each station has 4-6 sensors is committed.
+Here is the instruction to import these data to your database: https://docs.google.com/document/d/1ofkzuGExWcZ0Dj3cBtqTie1lMo38Tdpz50o_XceNyf0/edit#heading=h.une83t3i2cfi
+  
