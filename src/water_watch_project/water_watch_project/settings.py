@@ -91,7 +91,7 @@ WSGI_APPLICATION = 'water_watch_project.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'waterwatch_dump',
+        'NAME': 'waterwatch',
         'USER': 'waterwatchadmin',
         'PASSWORD': 'khongcopw', #replace your own pw
         'HOST': 'localhost',
