@@ -91,4 +91,6 @@ Create admin/superuser for Django admin (one time only):
   
 ##12) One year of real data for 5 stations, each station has 4-6 sensors is committed.
 Here is the instruction to import these data to your database: https://docs.google.com/document/d/1ofkzuGExWcZ0Dj3cBtqTie1lMo38Tdpz50o_XceNyf0/edit#heading=h.une83t3i2cfi
-  
+
+##13) We still need fake data to test update/delete/insert api. For example, you can insert 1 row of fake data, test the update api, and then delete it.
+Please do not delete/update the real data :D 
