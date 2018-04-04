@@ -15,8 +15,8 @@ class Station(models.Model):
     usgs_site_code = models.CharField(max_length=20)
     station_name = models.CharField(max_length=255, unique=True)
     us_state_cd = models.CharField(max_length=2)
-    longitude = models.DecimalField(max_digits=7, decimal_places=3)
-    latitude = models.DecimalField(max_digits=7, decimal_places=3)
+    longitude = models.DecimalField(max_digits=15, decimal_places=12)
+    latitude = models.DecimalField(max_digits=15, decimal_places=12)
 
     REQUIRED_FIELDS = ('station_name', 'us_state_cd', 'longitude', 'latitude')
 

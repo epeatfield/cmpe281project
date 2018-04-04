@@ -1,4 +1,5 @@
 from rest_framework import status, generics
+from rest_framework.pagination import PageNumberPagination
 from rest_framework.response import Response
 from django_filters import rest_framework as filters
 
@@ -15,12 +16,17 @@ class SensorDataFilter(filters.FilterSet):
         model = SensorData
         fields = ['min_value', 'max_value']
 
+class StandardResultsSetPagination(PageNumberPagination):
+    page_size = 100
+    page_size_query_param = 'page_size'
+    max_page_size = 1000
 
 class SensorDataListCreateView(generics.ListCreateAPIView):
     queryset = SensorData.objects.all()
     serializer_class = SensorDataSerializer
     filter_class = SensorDataFilter
     filter_backends = (filters.DjangoFilterBackend,)
+    pagination_class = StandardResultsSetPagination
 
     def create(self, request, *args, **kwargs):
         '''This method is overriden the create method to

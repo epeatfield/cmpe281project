@@ -1,5 +1,4 @@
 from django.db import models
-from model_utils import Choices
 from . import Station
 from . import SensorType
 
@@ -34,6 +33,6 @@ class Sensor(models.Model):
 
     def natural_key(self):
 
-        return (self.station.natural_key(), self.sensor_type.natural_key())
+        return [self.station.natural_key(), self.sensor_type.natural_key()]
 
     natural_key.dependencies = ['water_watch_api.station', 'water_watch_api.sensor_type']

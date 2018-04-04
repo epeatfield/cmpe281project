@@ -10,3 +10,4 @@ class SensorDataSerializer(serializers.ModelSerializer):
     class Meta:
         model = SensorData
         fields = '__all__'
+        depth = 2
