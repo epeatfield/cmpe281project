@@ -26,7 +26,7 @@ SECRET_KEY = '0cil(93%ub&6=&t1_0ugjcjk)g*tfbnv2qtj%ix63m@+snv!-m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['water-watch-project-dev.us-west-2.elasticbeanstalk.com']
 
 
 # Application definition
