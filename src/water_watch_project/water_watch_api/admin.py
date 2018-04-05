@@ -1,5 +1,4 @@
 from django.contrib import admin
-from django.contrib.admin import ModelAdmin
 from rangefilter.filter import DateRangeFilter, DateTimeRangeFilter
 
 
@@ -13,11 +12,13 @@ class StationAdmin(admin.ModelAdmin):
     actions = ['download_csv']
     list_filter = ['us_state_cd']
     list_display = ('id', 'station_name', 'us_state_cd', 'longitude', 'latitude')
+
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
-        import StringIO
-        f = StringIO.StringIO()
+        import io
+
+        f = io.StringIO()
         writer = csv.writer(f)
         writer.writerow(["id", "station", "state", "longitude", "latitude"])
 
@@ -31,7 +32,7 @@ class StationAdmin(admin.ModelAdmin):
 
     download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('id', 'station_name', 'us_state_cd',)
-    list_per_page = 5
+    list_per_page = 10
 
 
 class SensorAdmin(admin.ModelAdmin):
@@ -43,8 +44,9 @@ class SensorAdmin(admin.ModelAdmin):
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
-        import StringIO
-        f = StringIO.StringIO()
+        import io
+
+        f = io.StringIO()
         writer = csv.writer(f)
         writer.writerow(["id","station","sensor","status"])
 
@@ -58,17 +60,19 @@ class SensorAdmin(admin.ModelAdmin):
 
     download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('station__station_name', 'sensor_type__sensor_type_name','current_status',)
-    list_per_page = 5
+    list_per_page = 20
 
 class SensorTypeAdmin(admin.ModelAdmin):
 
     actions = ['download_csv']
     list_display = ('id', 'sensor_type_name', 'description', 'unit')
+
     def download_csv(self, request, queryset):
         import csv
         from django.http import HttpResponse
-        import StringIO
-        f = StringIO.StringIO()
+        import io
+
+        f = io.StringIO()
         writer = csv.writer(f)
         writer.writerow(["id","sensor","description","unit"])
 
@@ -82,12 +86,14 @@ class SensorTypeAdmin(admin.ModelAdmin):
 
     download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('sensor_type_name',)
-    list_per_page = 5
+    list_per_page = 20
+
 
 class SensorDataAdmin(admin.ModelAdmin):
 
     actions = ['download_csv']
     list_display = ('id', 'sensor', 'sensor_data_dateTime', 'sensor_data_value')
+
     def download_csv(self, request, queryset):
         #None
         import csv
@@ -109,9 +115,15 @@ class SensorDataAdmin(admin.ModelAdmin):
     download_csv.short_description = "Download CSV file for selected stats."
     list_filter = ('sensor__station__station_name', 'sensor__sensor_type__sensor_type_name', ('sensor_data_dateTime', DateTimeRangeFilter),)
     search_fields = ('sensor__station__station_name', 'sensor_data_value','sensor__sensor_type__sensor_type_name')
-    list_per_page = 10
+    list_per_page = 20
+
+
+class SensorMaintenanceHistoryAdmin(admin.ModelAdmin):
+    list_display = ('id', 'sensor', 'dateTime', 'status')
+
 
 admin.site.register(models.Station, StationAdmin)
 admin.site.register(models.SensorType, SensorTypeAdmin)
 admin.site.register(models.Sensor, SensorAdmin)
 admin.site.register(models.SensorData, SensorDataAdmin)
+admin.site.register(models.SensorMaintenanceHistory, SensorMaintenanceHistoryAdmin)

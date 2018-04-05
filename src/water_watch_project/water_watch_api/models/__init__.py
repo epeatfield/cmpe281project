@@ -2,3 +2,4 @@ from water_watch_api.models.station import Station
 from water_watch_api.models.sensor_type import SensorType
 from water_watch_api.models.sensor import Sensor
 from water_watch_api.models.sensor_data import SensorData
+from water_watch_api.models.sensor_maintenance_history import SensorMaintenanceHistory

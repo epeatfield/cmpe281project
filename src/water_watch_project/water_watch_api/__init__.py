@@ -1,0 +1,1 @@
+default_app_config = 'water_watch_api.apps.WaterWatchApiConfig'
