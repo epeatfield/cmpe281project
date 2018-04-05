@@ -46,46 +46,46 @@ Create admin/superuser for Django admin (one time only):
   Make sure 'rangefilter' is added to INSTALLED_APPS in settings.py
 
 ##8) Install django-filter
-  pip install django-filter==1.1.0
-  This package will help us to add filter on search GET request, for example search sensor data by min value and max value: 
-  http://localhost:8082/sensor_data/?min_value=10&max_value=10.6
+  pip install django-filter==1.1.0  
+  This package will help us to add filter on search GET request, for example search sensor data by min value and max value:   
+  http://localhost:8082/sensor_data/?min_value=10&max_value=10.6  
   
   Document: https://django-filter.readthedocs.io/en/master/guide/rest_framework.html 
   FUN FACTS (but annoying): the name of pakcage is "django-filter", but you will import "django-filters" 
-  And in settings.py, you have to put "django-filters" on top fo the INSTALLED_APPS list. If you put it somewhere else, this package will not be loaded. 
-  Still don't know why, but it seems to be conflicted with other packages if you do not put it in the right order. Anyway, the problem is fixed. 
-  This stupid thing wasted a lot of my time to figure out :D 
+  And in settings.py, you have to put "django-filters" on top fo the INSTALLED_APPS list. If you put it somewhere else, this package will not be loaded.   
+  Still don't know why, but it seems to be conflicted with other packages if you do not put it in the right order. Anyway, the problem is fixed.   
+  This stupid thing wasted a lot of my time to figure out :D   
   
-  See SensorDataFilter in sensor_data_view.py for more information.
+  See SensorDataFilter in sensor_data_view.py for more information.  
   
 ##9) EXPLANATION on how to split models and views to multiple files
-  As I said from the begining, Django put all the model classes in one single file named models.py, all the viewapi, viewset, etc classes in one single file named views.py 
-  And of course all the serializer classes in one single file named serializers.py
+  As I said from the begining, Django put all the model classes in one single file named models.py, all the viewapi, viewset, etc classes in one single file named views.py    
+  And of course all the serializer classes in one single file named serializers.py   
   
   Each of us will handle one set of models and apis, therefore, if we use the same file, conflict will happen a lot. 
   Therefore, I re-organize the structure so that we can work independently. 
-  At the moment, all the model classes are inside models folder, all the view classes are inside views folder, and all the serializers classes are inside serializer folder. 
-  This change will not affect how you import a class. For example: from ..models import SensorData => this works for both cases (no matter what one single file or mulitple files for model) 
+  At the moment, all the model classes are inside models folder, all the view classes are inside views folder, and all the serializers classes are inside serializer folder.   
+  This change will not affect how you import a class. For example: from ..models import SensorData => this works for both cases (no matter what one single file or mulitple files for model)   
   Document: https://simpleisbetterthancomplex.com/tutorial/2016/08/02/how-to-split-views-into-multiple-files.html
   
-  What will happen when you add an new model class or view model class or serializer class. Goto \_\_init__.py of the corresponding folder and import your newly created class. 
+  What will happen when you add an new model class or view model class or serializer class. Goto \_\_init__.py of the corresponding folder and import your newly created class.  
   For example: I create new serialier class named SensorDataSerializer, this is what I add to serializers/\_\_init.py: from water_watch_api.serializers.sensor_data_serializer import SensorDataSerializer
   
 ##10) EXPLANATION on BATCH INSERT:
-  By default, Django POST request will insert one object to database at a time. That says if you need to create 100 objects, you need to call 100 POST requests for each record.
-  That is not performance-wise if you have a lot of data to be created. That is the case for sensor_data, hence, I implemented the BATCH_INSERT POST request for sensor data.
+  By default, Django POST request will insert one object to database at a time. That says if you need to create 100 objects, you need to call 100 POST requests for each record.  
+  That is not performance-wise if you have a lot of data to be created. That is the case for sensor_data, hence, I implemented the BATCH_INSERT POST request for sensor data.  
   If I would like to create 100 objects, I will submit one list of objects in one single POST request.
   I have to do this because my component requires it.
   
   For other tables such as Staion, Sensor Type, Sensor -> the data records are limited in number, so we might not need the BATCH INSERT.
   
 ##11) Who is responsible for what apis? 
-  I put the details here: https://docs.google.com/document/d/1zM4_vTjfsNixK8qcU0VyWiBuvwzj3qCV5-pNMFH0qRc/edit 
-  I also put comments inside the \*\_view.py files, please read to get the ideas. And also please refer to our analysis document.
+  I put the details here: https://docs.google.com/document/d/1zM4_vTjfsNixK8qcU0VyWiBuvwzj3qCV5-pNMFH0qRc/edit  
+  I also put comments inside the \*\_view.py files, please read to get the ideas. And also please refer to our analysis document.  
   If you have any question please let me know.
     
-  The sample codes are made fully for SensorType and partly for SensorData.
-  Please read more to understand the differences between retrieve one single record or list all the data based on some filters. 
+  The sample codes are made fully for SensorType and partly for SensorData.  
+  Please read more to understand the differences between retrieve one single record or list all the data based on some filters.   
   Read more about Generics API view - the one we use in our project: http://www.django-rest-framework.org/api-guide/generic-views/
   Remember to add urlPattern to your new apis.
   
@@ -94,3 +94,40 @@ Here is the instruction to import these data to your database: https://docs.goog
 
 ##13) We still need fake data to test update/delete/insert api. For example, you can insert 1 row of fake data, test the update api, and then delete it.
 Please do not delete/update the real data :D 
+
+##14) API with token based authentication 
+Authentication token is a token string generated by the system with enough data to identify a particular user. Please run __python manage.py migrate__ to create new auth tokens table.
+Each time an admin user or a non-admin user is created, an authentication token will be automatically generated in this table.  
+However, your existing admin user will not have authentication token after this migration. Solution: go to Django admin, open Auth Token -> Tokens table.
+Click add token, select your existing admin user and click save, a token will be generated for that admin user.
+
+##15) Permission
+Our system only allows Admin to update/delete/create data. Searching or listing data is open to all kinds of user. That says our permission can be described as IsAuthenticated (you have to login/signup) and IsAdminOrReadonly.
+Django default supports IsAuthenticated but not IsAdminOrReadOnly. Therefore, I create a custom permission to define the IsAdminOrReadOnly.
+In your new view class, plese add this line to register for these permissions.  
+  from django_filters import rest_framework as filters  
+  from rest_framework import permissions as rest_framework_permissions  
+  
+  class YourView
+    permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)  
+##16) Basic Login/Signup/Logout 
+This is the home page: http://localhost:8082/. If you already log in, log out option will be showed. If you not login, then login/signup option will be displayed.
+Sign up in this page will create a __non-admin user__. If you wish to create another amdin user, use Django admin dashboard or python manage.py createsuperuser command.  
+http://localhost:8082/accounts/login/  
+http://localhost:8082/accounts/signup/  
+Of course when you sign up for a new user, its authentication token will be generated automatically. 
+These login and signup pages are ugly without style. TODO: style them in next component. 
+
+##17) How to test your api with authentication token and permission  
+Take this api as an example: http://localhost:8082/sensor_type/  
+a) Login as an admin user or non-admin user first and use Django API template on browser to test   
+Admin user will be able to search/get/update/add/delete data  
+Non-Admin user can only do search/get data  
+b) If you do not login, you will get 401 error  
+c) Test using postman  
+In POST/GET/PUT requests header, add Authorization : Token 7a08c34ad15437d56e5bbd379f94377be8e44bc0 (this is an token example, you have to use your own token)  
+d) You can use curl, httpie tool to test your apis. There are a lot of tools out there.  
+
+
+  
+
