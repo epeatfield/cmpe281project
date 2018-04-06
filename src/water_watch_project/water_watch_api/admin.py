@@ -60,7 +60,7 @@ class SensorAdmin(admin.ModelAdmin):
 
     download_csv.short_description = "Download CSV file for selected stats."
     search_fields = ('station__station_name', 'sensor_type__sensor_type_name','current_status',)
-    list_per_page = 20
+    list_per_page = 25
 
 class SensorTypeAdmin(admin.ModelAdmin):
 
