@@ -95,7 +95,6 @@ class SensorDataAdmin(admin.ModelAdmin):
     list_display = ('id', 'sensor', 'sensor_data_dateTime', 'sensor_data_value')
 
     def download_csv(self, request, queryset):
-        #None
         import csv
         from django.http import HttpResponse
         import io

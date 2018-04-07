@@ -21,4 +21,11 @@ class SensorDataCreateSerializer(serializers.ModelSerializer):
         model = SensorData
         fields = '__all__'
 
-#TODO: Emma - create new simple serializer for update and delete 
+class SensorDataRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
+    def __init__(self, *args, **kwargs):
+        many = kwargs.pop('many', True)
+        super(SensorDataRetrieveUpdateDestroySerializer, self).__init__(many=many, *args, **kwargs)
+
+    class Meta:
+        model = SensorData
+        fields = '__all__'

@@ -9,6 +9,7 @@ router = DefaultRouter()
 urlpatterns = [
     url(r'^$', views.HomePageView.as_view()),
     url(r'sensor_data/$', views.SensorDataListCreateView.as_view()),
+    url(r'sensor_data/(?P<pk>\w+)$', views.SensorDataRetrieveUpdateDestroyView.as_view()),
     url(r'sensor_type/(?P<pk>\w+)$', views.SensorTypeRetrieveUpdateDestroyView.as_view()),
     url(r'sensor_type/$', views.SensorTypeListCreateView.as_view()),
     url(r'sensor_maintenance_history/(?P<pk>\w+)$', views.SensorMaintenanceHistoryRetrieveUpdateDestroyView.as_view()),
@@ -16,5 +17,3 @@ urlpatterns = [
     url('signup/', views.SignUpView.as_view(), name='signup'),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
 ]
-
-

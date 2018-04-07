@@ -37,4 +37,3 @@ SELECT pg_catalog.setval('public.station_id_seq', 5, true);
 --
 -- PostgreSQL database dump complete
 --
-
