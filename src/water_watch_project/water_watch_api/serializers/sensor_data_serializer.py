@@ -22,10 +22,7 @@ class SensorDataCreateSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
 class SensorDataRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
-    def __init__(self, *args, **kwargs):
-        many = kwargs.pop('many', True)
-        super(SensorDataRetrieveUpdateDestroySerializer, self).__init__(many=many, *args, **kwargs)
-
+    
     class Meta:
         model = SensorData
         fields = '__all__'
