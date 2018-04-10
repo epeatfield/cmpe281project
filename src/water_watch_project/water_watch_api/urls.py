@@ -16,4 +16,10 @@ urlpatterns = [
     url(r'sensor_maintenance_history/$', views.SensorMaintenanceHistoryListCreateView.as_view()),
     url('signup/', views.SignUpView.as_view(), name='signup'),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
+
+    url(r'sensor/(?P<pk>\w+)$', views.SensorRetrieveUpdateDestroyView.as_view()),
+    url(r'sensor/$', views.SensorListCreateView.as_view()),
+
+    url(r'station/(?P<pk>\w+)$', views.StationRetrieveUpdateDestroyView.as_view()),
+    url(r'station/$', views.StationListCreateView.as_view()),
 ]

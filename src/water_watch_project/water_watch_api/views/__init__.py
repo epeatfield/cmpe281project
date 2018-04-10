@@ -6,3 +6,10 @@ from water_watch_api.views.sensor_type_view import SensorTypeListCreateView
 from water_watch_api.views.sensor_data_view import SensorDataRetrieveUpdateDestroyView
 from water_watch_api.views.sensor_maintenance_history_view import SensorMaintenanceHistoryRetrieveUpdateDestroyView
 from water_watch_api.views.sensor_maintenance_history_view import SensorMaintenanceHistoryListCreateView
+
+
+from water_watch_api.views.sensor_view import SensorRetrieveUpdateDestroyView
+from water_watch_api.views.sensor_view import SensorListCreateView
+
+from water_watch_api.views.station_view import StationRetrieveUpdateDestroyView
+from water_watch_api.views.station_view import StationListCreateView
