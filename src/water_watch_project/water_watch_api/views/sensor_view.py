@@ -12,15 +12,16 @@ from ..models import SensorType
 from ..serializers import SensorSerializer
 from ..serializers import StationSerializer
 from ..serializers import SensorTypeSerializer
+from drf_multiple_model.views import FlatMultipleModelAPIView
 
 
 class SensorListCreateView(generics.ListCreateAPIView):
-    queryset=[{'queryset': Sensor.objects.all(), 'serializer_class': SensorSerializer},{'queryset': SensorType.objects.all(), 'serializer_class': SensorTypeSerializer},{'queryset': Station.objects.all(), 'serializer_class': StationSerializer}]
+    queryset=Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)
 
 
-class SensorRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
-    queryset=[{'queryset': Sensor.objects.all(), 'serializer_class': SensorSerializer},{'queryset': SensorType.objects.all(), 'serializer_class': SensorTypeSerializer},{'queryset': Station.objects.all(), 'serializer_class': StationSerializer}]
+class SensorRetrieveUpdateDestroyView(generics.ListCreateAPIView,):
+    queryset=Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)

@@ -12,7 +12,6 @@ class Station(models.Model):
     class Meta:
         db_table = 'station'
         ordering = ['id', 'station_name']
-
     objects = StationManager()
     ACTIVE = 'ACTIVE'
     INACTIVE = 'INACTIVE'
@@ -38,7 +37,7 @@ class Station(models.Model):
 
     def __str__(self):
         return self.station_name
-    
+
     def natural_key(self):
         return self.station_name
 
