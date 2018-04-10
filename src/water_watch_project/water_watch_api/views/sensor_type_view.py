@@ -17,4 +17,3 @@ class SensorTypeRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView)
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)
 
     #We do not have the need to BATCH INSERT sensor type objects, hence, no need to override create method
-
