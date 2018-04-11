@@ -33,6 +33,7 @@ ALLOWED_HOSTS = ['water-watch-project-dev.us-west-2.elasticbeanstalk.com', 'loca
 
 INSTALLED_APPS = [
     'django_filters',
+'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,9 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rangefilter',
     'water_watch_api',
+    'django.contrib.gis',
+
+
 
 
 
@@ -114,7 +118,7 @@ if 'RDS_DB_NAME' in os.environ:
 else:
     DATABASES = {
         'default': {
-            'ENGINE': 'django.db.backends.postgresql_psycopg2',
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
             'NAME': 'waterwatch',
             'USER': 'waterwatchadmin',
             'PASSWORD': 'khongcopw',  # replace your own pw

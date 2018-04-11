@@ -1,4 +1,5 @@
 from water_watch_api.views.home_page_view import HomePageView
+from water_watch_api.views.station_map_view import StationMapView
 from water_watch_api.views.sign_up_view import SignUpView
 from water_watch_api.views.sensor_data_view import SensorDataListCreateView
 from water_watch_api.views.sensor_type_view import SensorTypeRetrieveUpdateDestroyView
