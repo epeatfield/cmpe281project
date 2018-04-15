@@ -36,7 +36,8 @@ class StationMapView(FilterView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'station_map.html'
     filterset_class = StationMapFilter
-    paginated_by = 3
+    context_object_name = 'stations'
+    paginate_by = 3
     model = Station
 
 
