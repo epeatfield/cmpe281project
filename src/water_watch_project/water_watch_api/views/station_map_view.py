@@ -8,6 +8,7 @@ from django.contrib.gis import measure
 
 
 
+
 ACTIVE = 'ACTIVE'
 INACTIVE = 'INACTIVE'
 MAINTENANCE = 'MAINTENANCE'
@@ -16,6 +17,9 @@ STATUS_CHOICES = (
     (INACTIVE, 'inactive'),
     (MAINTENANCE, 'maintenance'),
 )
+
+
+
 
 
 class StationMapFilter(django_filters.FilterSet):
@@ -32,7 +36,9 @@ class StationMapView(FilterView):
     renderer_classes = [TemplateHTMLRenderer]
     template_name = 'station_map.html'
     filterset_class = StationMapFilter
+    paginated_by = 3
     model = Station
+
 
     def get_queryset(self, *args, **kwargs):
         query = Station.objects.all()
