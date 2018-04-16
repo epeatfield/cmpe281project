@@ -1,23 +1,31 @@
-# from ..models import SensorData
-# from rest_framework.renderers import TemplateHTMLRenderer
-# from django_filters.views import FilterView
-# from django import forms
-# import django_filters as filters
+from ..models import SensorData, Station, Sensor, SensorType
+from rest_framework.renderers import TemplateHTMLRenderer
+from django_filters.views import FilterView
+from django import forms
+import django_filters as filters
 
 
-# class StationMapFilter(filters.FilterSet):
-#     # current_status = django_filters.MultipleChoiceFilter(choices=STATUS_CHOICES, widget=forms.CheckboxSelectMultiple)
-#
-#     min_value = filters.NumberFilter(name="sensor_data_value", lookup_expr='gte', widget=forms.NumberInput)
-#     max_value = filters.NumberFilter(name="sensor_data_value", lookup_expr='lte', widget=forms.NumberInput)
-#     sensor_id = filters.NumberFilter(name="sensor_id", widget=forms.NumberInput)
-#     start_date = filters.DateTimeFilter(name="sensor_data_dateTime", lookup_expr='gte')
-#     end_date = filters.DateTimeFilter(name="sensor_data_dateTime", lookup_expr='lte')
-#
-#     class Meta:
-#         model = SensorData
-#         fields = ['min_value', 'max_value','sensor_id','start_date','end_date']
-#
-#     class Meta:
-#         model = SensorData
-#         fields = ['current_status', 'longitude', 'latitude']
+class DashboardSensorDataFilter(filters.FilterSet):
+    station = filters.ModelChoiceFilter(label="Station", name="sensor__station_id", queryset=Station.objects.filter(current_status='ACTIVE'),
+                                      widget=forms.Select)
+    start_date = filters.DateTimeFilter(label="Start Date", name="sensor_data_dateTime", lookup_expr='gte',
+                                        widget=forms.DateTimeInput(attrs={'type': 'date'}))
+    end_date = filters.DateTimeFilter(label="End Date", name="sensor_data_dateTime", lookup_expr='lte',
+                                      widget=forms.DateTimeInput(attrs={'type': 'date'}))
+    sensor_type = filters.ModelChoiceFilter(label="Sensor Type", name="sensor__sensor_type_id", queryset=SensorType.objects.all(),
+                                          widget=forms.Select)
+
+
+    class Meta:
+        model = SensorData
+        fields = ['start_date', 'end_date', 'station',
+                  'sensor_type']
+
+
+class DashboardSensorDataView(FilterView):
+    renderer_classes = [TemplateHTMLRenderer]
+    template_name = 'dashboard.html'
+    filterset_class = DashboardSensorDataFilter
+    context_object_name = 'sensor_data_list'
+    paginate_by = 30
+    model = SensorData
