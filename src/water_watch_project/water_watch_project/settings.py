@@ -26,13 +26,14 @@ SECRET_KEY = '0cil(93%ub&6=&t1_0ugjcjk)g*tfbnv2qtj%ix63m@+snv!-m'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['water-watch-project-dev.us-west-2.elasticbeanstalk.com', 'localhost']
 
 
 # Application definition
 
 INSTALLED_APPS = [
     'django_filters',
+    'widget_tweaks',
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
@@ -43,6 +44,10 @@ INSTALLED_APPS = [
     'rest_framework.authtoken',
     'rangefilter',
     'water_watch_api',
+    'django.contrib.gis',
+
+
+
 
 
 
@@ -100,18 +105,28 @@ WSGI_APPLICATION = 'water_watch_project.wsgi.application'
 #     }
 # }
 
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'waterwatch',
-        'USER': 'waterwatchadmin',
-        'PASSWORD': 'khongcopw', #replace your own pw
-        'HOST': 'localhost',
-        'PORT': '',
+if 'RDS_DB_NAME' in os.environ:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': os.environ['RDS_DB_NAME'],
+            'USER': os.environ['RDS_USERNAME'],
+            'PASSWORD': os.environ['RDS_PASSWORD'],
+            'HOST': os.environ['RDS_HOSTNAME'],
+            'PORT': os.environ['RDS_PORT'],
+        }
     }
-}
-
-
+else:
+    DATABASES = {
+        'default': {
+            'ENGINE': 'django.contrib.gis.db.backends.postgis',
+            'NAME': 'waterwatch',
+            'USER': 'waterwatchadmin',
+            'PASSWORD': 'khongcopw',  # replace your own pw
+            'HOST': 'localhost',
+            'PORT': '',
+        }
+    }
 
 # Password validation
 # https://docs.djangoproject.com/en/1.11/ref/settings/#auth-password-validators
@@ -152,3 +167,4 @@ USE_TZ = True
 STATIC_URL = '/static/'
 LOGIN_REDIRECT_URL = '/'
 LOGOUT_REDIRECT_URL = '/'
+STATIC_ROOT = os.path.join(BASE_DIR, "www", "static")
