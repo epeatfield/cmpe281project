@@ -133,5 +133,11 @@ In POST/GET/PUT requests header, add Authorization : Token 7a08c34ad15437d56e5bb
 d) You can use curl, httpie tool to test your apis. There is a lot of tools out there.  
 
 
-  
-
+##18) GeoDjango Installation
+Our vagrant OS is Ubuntu, so here are the simple installation for Unbuntu:
+sudo apt-get install binutils libproj-dev gdal-bin  
+sudo apt install postgis  
+psql <db name>  
+> CREATE EXTENSION postgis;  
+==> our local db name is "waterwatch"
+Please make sure you run python manage.py migrate before runserver.  
