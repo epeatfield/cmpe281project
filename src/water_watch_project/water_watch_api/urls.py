@@ -8,6 +8,8 @@ router = DefaultRouter()
 
 urlpatterns = [
     url(r'^$', views.HomePageView.as_view()),
+    url(r'station_map/$', views.StationMapView.as_view()),
+    url(r'dashboard/$', views.DashboardSensorDataView.as_view()),
     url(r'sensor_data/$', views.SensorDataListCreateView.as_view()),
     url(r'sensor_data/(?P<pk>\w+)$', views.SensorDataRetrieveUpdateDestroyView.as_view()),
     url(r'sensor_type/(?P<pk>\w+)$', views.SensorTypeRetrieveUpdateDestroyView.as_view()),

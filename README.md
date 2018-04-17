@@ -132,6 +132,34 @@ c) Test using postman
 In POST/GET/PUT requests header, add Authorization : Token 7a08c34ad15437d56e5bbd379f94377be8e44bc0 (this is an token example, you have to use your own token)  
 d) You can use curl, httpie tool to test your apis. There is a lot of tools out there.  
 
+##18) New packages installation  
+pip install django-widget-tweaks==1.4.2  
+pip install django-filter==1.1.0 --upgrade  
+
+##19)
+Widget Tweaks is an helpful package which help us to break down the form elements like i showed you.  
+https://simpleisbetterthancomplex.com/2015/12/04/package-of-the-week-django-widget-tweaks.html    
+https://simpleisbetterthancomplex.com/tutorial/2016/11/28/how-to-filter-querysets-dynamically.html  
+For example in our login view: 
+
+{% extends 'base.html' %}  
+{% load widget_tweaks %}  
+{% block title %}Login{% endblock %}  
+
+{% block content %}  
+<h2>Login</h2>  
+<form method="post">  
+  {% csrf_token %}  
+  {{ form.username.label_tag }}  
+  {% render_field form.username class="form-control" %}  
+    {{ form.password.label_tag }}  
+  {% render_field form.password class="form-control" %}  
+  <button type="submit">Login</button>  
+</form>  
+{% endblock %}  
+
+
+
 
   
 
