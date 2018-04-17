@@ -25,3 +25,8 @@ class SensorRetrieveUpdateDestroyView(generics.ListCreateAPIView,):
     queryset=Sensor.objects.all()
     serializer_class = SensorSerializer
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)
+
+class SensorSearchView(generics.ListCreateAPIView,):
+    queryset=Sensor.objects.all()
+    serializer_class = SensorSerializer
+    permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)

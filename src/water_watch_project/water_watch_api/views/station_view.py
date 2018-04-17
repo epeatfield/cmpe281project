@@ -21,3 +21,8 @@ class StationRetrieveUpdateDestroyView(generics.RetrieveUpdateDestroyAPIView):
     queryset = Station.objects.all()
     serializer_class = StationSerializer
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)
+
+class StationSearchView(generics.ListCreateAPIView):
+    queryset = Station.objects.all()
+    serializer_class = StationSerializer
+    permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)

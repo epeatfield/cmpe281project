@@ -17,3 +17,9 @@ class StationRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = Station
         fields = '__all__'
+
+
+class StationSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Station
+        fields = '__all__'
