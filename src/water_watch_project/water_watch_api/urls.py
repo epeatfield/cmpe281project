@@ -19,9 +19,13 @@ urlpatterns = [
     url('signup/', views.SignUpView.as_view(), name='signup'),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
 
-    url(r'sensor/(?P<pk>\w+)$', views.SensorRetrieveUpdateDestroyView.as_view()),
-    url(r'sensor/$', views.SensorListCreateView.as_view()),
+    url(r'sensor/update/(?P<pk>\w+)$', views.SensorRetrieveUpdateDestroyView.as_view()),
+    url(r'sensor/create/$', views.SensorListCreateView.as_view()),
+    url(r'sensor/search/$', views.SensorSearchView.as_view()),
+    url(r'sensor/$', views.SensorSearchView.as_view()),
 
-    url(r'station/(?P<pk>\w+)$', views.StationRetrieveUpdateDestroyView.as_view()),
-    url(r'station/$', views.StationListCreateView.as_view()),
+    url(r'station/update/(?P<pk>\w+)$', views.StationRetrieveUpdateDestroyView.as_view()),
+    url(r'station/create/$', views.StationListCreateView.as_view()),
+    url(r'station/search/$', views.StationSearchView.as_view()),
+    url(r'station/$', views.StationSearchView.as_view()),
 ]

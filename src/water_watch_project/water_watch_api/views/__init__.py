@@ -12,6 +12,8 @@ from water_watch_api.views.sensor_maintenance_history_view import SensorMaintena
 
 from water_watch_api.views.sensor_view import SensorRetrieveUpdateDestroyView
 from water_watch_api.views.sensor_view import SensorListCreateView
+from water_watch_api.views.sensor_view import SensorSearchView
 
 from water_watch_api.views.station_view import StationRetrieveUpdateDestroyView
 from water_watch_api.views.station_view import StationListCreateView
+from water_watch_api.views.station_view import StationSearchView

@@ -6,6 +6,8 @@ from water_watch_api.serializers.sensor_maintenance_history_serializer import Se
 
 from water_watch_api.serializers.sensor_serializer import SensorSerializer
 from water_watch_api.serializers.sensor_serializer import SensorCreateSerializer
+from water_watch_api.serializers.sensor_serializer import SensorSearchSerializer
 
 from water_watch_api.serializers.station_serializer import StationSerializer
 from water_watch_api.serializers.station_serializer import StationCreateSerializer
+from water_watch_api.serializers.station_serializer import StationSearchSerializer

@@ -19,3 +19,8 @@ class SensorRetrieveUpdateDestroySerializer(serializers.ModelSerializer):
     class Meta:
         model = Sensor
         fields = '__all__'
+
+class SensorSearchSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Sensor
+        fields = '__all__'
