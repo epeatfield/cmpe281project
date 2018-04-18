@@ -162,7 +162,7 @@ For example in our login view:
 Install GeoDjango
 sudo apt-get install binutils libproj-dev gdal-bin  
 sudo apt install postgis  
-psql <db name>  
+psql <db name>  or use: sudo -u postgres psql
 > CREATE EXTENSION postgis;   
 
 
