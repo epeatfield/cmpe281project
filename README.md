@@ -158,6 +158,14 @@ For example in our login view:
 </form>  
 {% endblock %}  
 
+##20)
+Install GeoDjango
+sudo apt-get install binutils libproj-dev gdal-bin  
+sudo apt install postgis  
+psql <db name>  
+> CREATE EXTENSION postgis;   
+
+
 
 
 
