@@ -12,7 +12,7 @@ from ..models import SensorType
 from ..serializers import SensorSerializer
 from ..serializers import StationSerializer
 from ..serializers import SensorTypeSerializer
-from drf_multiple_model.views import FlatMultipleModelAPIView
+
 
 
 class SensorListCreateView(generics.ListCreateAPIView):
