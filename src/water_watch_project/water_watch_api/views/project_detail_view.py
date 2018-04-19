@@ -4,7 +4,7 @@ from django.views.generic import TemplateView
 # Create your views here.
 
 
-class HomePageView(TemplateView):
+class ProjectDetailView(TemplateView):
 
     def get(self, request, **kwargs):
-        return render(request, 'home.html', context=None)
+        return render(request, 'projdetail.html', context=None)

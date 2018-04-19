@@ -27,4 +27,3 @@ urlpatterns = [
     url('accounts/', include('water_watch_api.urls')),
     url('accounts/', include('django.contrib.auth.urls')),
 ]
-

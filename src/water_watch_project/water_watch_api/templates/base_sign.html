@@ -1,0 +1,71 @@
+<!-- This is a template for sign in and sign out -->
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <title>{% block mytitle %}base_sign {% endblock %}</title>
+
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
+</head>
+<style>
+  .navbar {
+
+    margin-bottom: 0;
+    border-radius: 0;
+    background-color: #004d66;
+    border: none;
+    height: 90px;
+    padding-left: 20px;
+    padding-right: 20px;
+  }
+</style>
+
+<body link="orange">
+  <nav class="navbar navbar-inverse">
+    <div class="container-fluid">
+      <div class="navbar-header">
+        <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#myNavbar">
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+       <span class="icon-bar"></span>
+     </button>
+        <a class="navbar-brand" href="{% url 'home' %}">
+          <font color=#ffffcc>
+            <h1>Water Watch Project</font></h1>
+            <br>
+        </a>
+      </div>
+      <div class="collapse navbar-collapse" id="myNavbar">
+      </div>
+    </div>
+  </nav>
+
+
+  <div class="container-fluid">
+    <center>
+      <br>
+      <br>
+      <br>
+      <p>
+        <h2>  {% block heading %}Sign In{% endblock %}</h2></p>
+      <br>
+    </center>
+    <div class="row">
+      <div class="col-sm-3" style="background-color:white;">. </div>
+      <div class="col-sm-6" style="background-color:#f2f2f2;">
+        <br><br><br>
+        <center>{% block myform %}Form{% endblock %}
+        </center>
+        <br><br><br>
+      </div>
+      <div class="col-sm-3" style="background-color:white;">. </div>
+    </div>
+  </div>
+
+</body>
+
+</html>
