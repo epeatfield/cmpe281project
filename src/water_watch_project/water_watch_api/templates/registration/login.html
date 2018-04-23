@@ -17,13 +17,8 @@
   <form method="post">
     {% csrf_token %}
     <br>
-    <h3>Username* &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ form.username }}</h3>
-    <h3>Password*:&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{{ form.username }}</h3>
-    <br>
-    <a href="#">
-      <font color="orange"><u>
-        <h4>Forgot Password?</h4></u></font>
-    </a>
+    <h3>{{ form.username.label_tag }} &nbsp;&nbsp;&nbsp;&nbsp; &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% render_field form.username class="form-control" %}</h3>
+    <h3>{{ form.password.label_tag }}&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;{% render_field form.password class="form-control" %}</h3>
     <br>
     <center>
       <input type="submit" class="btn btn-success btn-lg" value="Sign In">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
