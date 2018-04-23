@@ -11,9 +11,10 @@
 
   {% load widget_tweaks %}
   <p>
-    <h2>  {% block heading %}Sign In Here{% endblock %}</h2>
+    <h2>  {% block heading %}Sign In Here {% endblock %}</h2>
   </p>
   {% block myform %}
+
   <form method="post">
     {% csrf_token %}
     <br>
@@ -22,7 +23,6 @@
     <br>
     <center>
       <input type="submit" class="btn btn-success btn-lg" value="Sign In">&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
-      <input class="btn btn-primary btn-lg" type="reset" value="Reset">
     </center>
   </form>
   {% endblock %}
