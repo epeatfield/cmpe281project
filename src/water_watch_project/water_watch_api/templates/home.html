@@ -1,3 +1,4 @@
+{%load static from staticfiles%}
 <!DOCTYPE html>
 <html lang="en">
 
@@ -95,7 +96,7 @@
   <!-- First Container -->
   <div class="container-fluid bg-1 text-center">
     <h3 class="margin">Group Project</h3> {% load static %}
-    <img src={% static " background.jpg " %} class="img-responsive img-circle margin" style="display:inline" alt="Bird" width="350" height="350">
+    <img src="{% static 'home2.jpg' %}" class="img-responsive img-circle margin" style="display:inline" alt="home1" width="500" height="500">
     </img>
     <h3>CMPE 281 - Project Group 3</h3>
   </div>
@@ -107,25 +108,28 @@
       <a href="{% url 'projectdetail' %}">
         <div class="col-sm-3">
           <p>Project Details</p>
-          <img src="default" class="img-responsive margin" style="width:100%" alt="Image">
+          <img src="{% static 'proj_details2.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
       <a href="{% url 'signup' %}">
         <div class="col-sm-3">
           <p>Sign Up</p>
-          <img src="birds2.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+          <br>
+          <br>
+          <img src="{% static 'signup.png' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
       <a href="{% url 'aboutus' %}">
         <div class="col-sm-3">
           <p>About Us</p>
-          <img src="birds3.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+          <img src="{% static 'about_us.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
       <a href="{% url 'contact' %}">
         <div class="col-sm-3">
           <p>Contact</p>
-          <img src="birds3.jpg" class="img-responsive margin" style="width:100%" alt="Image">
+          <br>
+          <img src="{% static 'contact.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
     </div>

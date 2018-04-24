@@ -35,5 +35,4 @@ urlpatterns = [
     url(r'aboutus/', views.AboutUsView.as_view(), name='aboutus'),
     url(r'contact/', views.ContactView.as_view(), name='contact'),
 
-    
 ]
