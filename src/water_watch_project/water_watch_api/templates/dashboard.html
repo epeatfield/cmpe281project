@@ -6,71 +6,45 @@
     <title>Dashboard</title>
     {% endblock %}
 </head>
+
 <style>
-    path {
-        stroke: #fff;
-    }
 
-    path:hover {
-        opacity: 0.9;
-    }
 
-    rect:hover {
-        fill: blue;
-    }
+        .axis path {
+            fill: none;
+            stroke: #777;
+            shape-rendering: crispEdges;
+        }
+        .axis text {
+            font-family: Lato;
+            font-size: 13px;
+        }
+        .legend {
+            font-size: 14px;
+            font-weight: bold;
+        }
 
-    .axis {
-        font: 10px sans-serif;
-    }
 
-    .legend tr {
-        border-bottom: 1px solid grey;
-    }
-
-    .legend tr:first-child {
-        border-top: 1px solid grey;
-    }
-
-    .axis path,
-    .axis line {
-        fill: none;
-        stroke: #000;
-        shape-rendering: crispEdges;
-    }
-
-    .x.axis path {
-        display: none;
-    }
-
-    .legend {
-        margin-bottom: 76px;
-        display: inline-block;
-        border-collapse: collapse;
-        border-spacing: 0px;
-    }
-
-    .legend td {
-        padding: 4px 5px;
-        vertical-align: bottom;
-    }
-
-    .legendFreq,
-    .legendPerc {
-        align: right;
-        width: 50px;
-    }
 </style>
 
 
 <body>
+<!--<script>-->
+<!--function submitForm()-->
+<!--{-->
+<!--// $('#searchForm')[0].submit();-->
+<!--console.log("test");-->
+<!--document.myForm.submit();-->
+<!--}-->
 
+<!--</script>-->
 <br>
 {% if user.is_authenticated %}
 <h2>Welcome, {{ user.username }}</h2>
 {% endif %}
 {% block content %}
 <div id='dashboard'>
-    <form method="get">
+    <form id="searchForm" name="myForm" method="get">
         <div class="well">
             <h3 style="margin-top: 0">Filter</h3>
             <div class="row">
@@ -90,59 +64,134 @@
             <button type="submit" class="btn btn-primary">
                 <span class="glyphicon glyphicon-search"></span> Search
             </button>
+            <script type="text/javascript">
+
+            </script>
         </div>
     </form>
 
     <div id='chart'>
+        <svg id="visualisation" width="1000" height="500"></svg>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone.js"></script>
+        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone-with-data.min.js"></script>
         <script>
-            var jsonCircles = [
-                {
-                    "x_axis": 30,
-                    "y_axis": 30,
-                    "radius": 20,
-                    "color": "green"
-                }, {
-                    "x_axis": 70,
-                    "y_axis": 70,
-                    "radius": 20,
-                    "color": "purple"
-                }, {
-                    "x_axis": 110,
-                    "y_axis": 100,
-                    "radius": 20,
-                    "color": "red"
-                }];
-            function buildDataJsonString() {
+            function buildDataObject() {
+                var data = [];
+                {%for sensor_data in sensor_data_list %}
+                var dataObject = {};
+                dataObject.sensorId = {{sensor_data.sensor.id}};
+                dataObject.value = {{sensor_data.sensor_data_value}};
+                dataObject.datetime = "{{sensor_data.sensor_data_dateTime.isoformat|safe|escapejs}}";
+                dataObject.station = "{{sensor_data.sensor.station.station_name|escapejs}}";
+                dataObject.sensor_type = "{{sensor_data.sensor.sensor_type.sensor_type_name|escapejs}}";
+                data.push(dataObject);
 
-                var json = "[";
-                var i = 0;
-                {% for sensor_data in sensor_data_list %}
-                    json+= "{\"sensorId\":";
-                    json+= {{sensor_data.sensor.id}};
-                    json+=",";
-                    json+= "{\"datetime\":";
-                    var date = "{{sensor_data.sensor_data_dateTime.isoformat|safe|escapejs}}";
-                    json+= date;
+                {%endfor %}
+                return data;
+            }
 
-                    json+=",";
-                    json+= "{\"value\":";
-                    json+= {{sensor_data.sensor_data_value}};
-                    if (i < {{sensor_data_list.count}} - 1) {
-                       json+= "}," ;
-                    } else {
-                        json+="}";
-                    }
+            function initChart() {
+                var timeFormat = d3.time.format.iso;
+                var jsonData = buildDataObject();
+                jsonData.forEach(function(d){
+                     d.datetime = timeFormat.parse(d.datetime);
+                });
+                console.log(jsonData);
+                var dataGroup = d3.nest()
+                    .key(function (d) {
+                        console.log(d.sensorId);
+                        return d.sensorId;
+                    })
+                    .entries(jsonData);
+                console.log(dataGroup);
 
-                    i++;
-                // {% endfor %}
-                json+="]";
-                return json;
-            };
-            var sensorDataJson = buildDataJsonString();
-            document.write(sensorDataJson);
+                var color = d3.scale.category10();
+
+                var vis = d3.select("#visualisation"),
+                    WIDTH = 1000,
+                    HEIGHT = 500,
+                    MARGINS = {
+                        top: 20,
+                        right: 20,
+                        bottom: 20,
+                        left: 50
+                    },
+                   lSpace = WIDTH/dataGroup.length;
+
+                   timezoneOffset = new Date().getTimezoneOffset();
+                   console.log('my tz' + timezoneOffset);
+
+                    xScale = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain(d3.extent(jsonData, function(d){
+                        return d.datetime;
+                    })),
+                    yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(jsonData, function(d) {
+                        return d.value;
+                    }), d3.max(jsonData, function(d) {
+                        return d.value;
+                    })]),
+                    xAxis = d3.svg.axis()
+                    .scale(xScale).orient("bottom").ticks(10).tickFormat(function(d){
+
+
+                    return moment(d).utcOffset(timezoneOffset).format('HH:mm:ss');
+          }),
+                    yAxis = d3.svg.axis()
+                    .scale(yScale)
+                    .orient("left");
+
+                    vis.append("svg:g")
+                        .attr("class", "x axis")
+                        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+                        .call(xAxis);
+                    vis.append("svg:g")
+                        .attr("class", "y axis")
+                        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+                        .call(yAxis);
+                    var lineGen = d3.svg.line()
+                        .x(function(d) {
+                            console.log(xScale(d.datetime));
+                            return xScale(d.datetime);
+                        })
+                        .y(function(d) {
+                            return yScale(d.value);
+                        })
+                        .interpolate("basis");
+
+                    dataGroup.forEach(function(d, i) {
+                        vis.append('svg:path')
+                            .attr('d', lineGen(d.values))
+                            .attr('stroke', 'blue')
+                            .attr('stroke-width', 2)
+                            .attr('fill', 'none');
+                    });
+
+                     // vis.append("text")
+                     //        .attr("x", (lSpace/2)+i*lSpace)
+                     //        .attr("y", HEIGHT)
+                     //        .style("fill", "black")
+                     //        .attr("class","legend")
+                     //        .on('click',function(){
+                     //            var active   = d.active ? false : true;
+                     //            var opacity = active ? 0 : 1;
+                     //            d3.select("#line_" + d.key).style("opacity", opacity);
+                     //            d.active = active;
+                     //        })
+                     //        .text(d.station + d.sensor_type);
+            }
+
+            initChart();
+
         </script>
     </div>
+    <!--{% for key,value in request.GET.items %}-->
+    <!--{{key}} {{value}}-->
+    <!--{% endfor %}-->
+    {{request.GET|length}}
     <div id='table'>
+
+
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -154,25 +203,32 @@
             </tr>
             </thead>
             <tbody>
-            {% for sensor_data in sensor_data_list %}
-            <tr>
-                <td>{{sensor_data.sensor.id}}</td>
-                <td>{{sensor_data.sensor.station.station_name}}</td>
-                <td>{{sensor_data.sensor.sensor_type.sensor_type_name}}</td>
-                <td>{{sensor_data.sensor_data_dateTime}}</td>
-                <td>{{ sensor_data.sensor_data_value }}</td>
-            </tr>
-            {% empty %}
-            <tr>
-                <td colspan="5">No data</td>
-            </tr>
-            {% endfor %}
+            {% if request.GET|length > 0 %}
+                {% for sensor_data in sensor_data_list %}
+                <tr>
+                    <td>{{sensor_data.sensor.id}}</td>
+                    <td>{{sensor_data.sensor.station.station_name}}</td>
+                    <td>{{sensor_data.sensor.sensor_type.sensor_type_name}}</td>
+                    <td>{{sensor_data.sensor_data_dateTime}}</td>
+                    <td>{{ sensor_data.sensor_data_value }}</td>
+                </tr>
+                {% empty %}
+                <tr>
+                    <td colspan="5">No data</td>
+                </tr>
+                {% endfor %}
+            {% else %}
+                <tr>
+                    <td colspan="5">No data</td>
+                </tr>
+            {% endif %}
+
             </tbody>
         </table>
     </div>
 
 
-    {% if is_paginated %}
+    {% if request.GET|length > 0 and is_paginated %}
     <ul class="pagination">
         {% if page_obj.has_previous %}
         <a href="?page={{ page_obj.previous_page_number }}{% for key,value in request.GET.items %}{% ifnotequal key 'page' %}&{{ key }}={{ value }}{% endifnotequal %}{% endfor %}">previous</a>
@@ -185,6 +241,7 @@
         {% endif %}
     </ul>
     {% endif %}
+
 </div>
 
 <br>

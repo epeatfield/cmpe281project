@@ -12,14 +12,16 @@ class DashboardSensorDataFilter(filters.FilterSet):
                                         widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
     end_date = filters.IsoDateTimeFilter(label="End Date", name="sensor_data_dateTime", lookup_expr='lte',
                                       widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
-    sensor_type = filters.ModelChoiceFilter(label="Sensor Type", name="sensor__sensor_type_id", queryset=SensorType.objects.all(),
-                                          widget=forms.Select)
+    sensor_type = filters.ModelChoiceFilter(label="Sensor Type *", name="sensor__sensor_type_id", queryset=SensorType.objects.all(),
+                                          widget=forms.Select,required=True)
+
 
 
     class Meta:
         model = SensorData
         fields = ['start_date', 'end_date', 'station',
                   'sensor_type']
+
 
 
 class DashboardSensorDataView(FilterView):
@@ -29,3 +31,4 @@ class DashboardSensorDataView(FilterView):
     context_object_name = 'sensor_data_list'
     paginate_by = 50
     model = SensorData
+
