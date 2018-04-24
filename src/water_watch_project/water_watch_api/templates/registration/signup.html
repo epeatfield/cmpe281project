@@ -14,26 +14,26 @@
     <h2>  {% block heading %}Sign Up Here{% endblock %}</h2>
   </p>
   {% block myform %}
-  <form method="post">
-    {% csrf_token %}
-    {% for field in form %}
+  <form method="post" align="left">
+    {% csrf_token %} {% for field in form %}
     <br>
-    <h3>
+    <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
     {{ field.label_tag }}
 
     {% if form.is_bound %}
       {% if field.errors %}
-        {% render_field field class="form-control is-invalid" %}
+        {% render_field field class="is-invalid" %}
         {% for error in field.errors %}
           <div class="invalid-feedback">
-            {{ error }}
+          {{ error }}
           </div>
         {% endfor %}
       {% else %}
-        {% render_field field class="form-control is-valid" %}
+      {% render_field field class="is-valid" %}
       {% endif %}
     {% else %}
-      {% render_field field class="form-control" %}
+    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+    {% render_field field %}
     {% endif %}
 {% endfor %}
     {% if field.help_text %}
