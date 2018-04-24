@@ -15,6 +15,7 @@
   </p>
   {% block myform %}
   <form method="post">
+
     {% csrf_token %} {% for field in form %}
     <br>
     <h3>
