@@ -23,6 +23,7 @@ class Station(models.Model):
     )
     usgs_site_code = models.CharField(max_length=20)
     station_name = models.CharField(max_length=255, unique=True)
+    station_short_name = models.CharField(max_length=255, null=True)
     us_state_cd = models.CharField(max_length=2)
     longitude = models.DecimalField(max_digits=15, decimal_places=12)
     latitude = models.DecimalField(max_digits=15, decimal_places=12)

@@ -20,8 +20,10 @@
             font-size: 13px;
         }
         .legend {
-            font-size: 14px;
+            font-size: 16px;
             font-weight: bold;
+            text-anchor: start;
+            position: relative;
         }
 
 
@@ -71,11 +73,12 @@
     </form>
 
     <div id='chart'>
-        <svg id="visualisation" width="1000" height="500"></svg>
+        <svg id="visualisation" width="1050" height="600"></svg>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone.js"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone-with-data.min.js"></script>
+        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
         <script>
             function buildDataObject() {
                 var data = [];
@@ -84,7 +87,7 @@
                 dataObject.sensorId = {{sensor_data.sensor.id}};
                 dataObject.value = {{sensor_data.sensor_data_value}};
                 dataObject.datetime = "{{sensor_data.sensor_data_dateTime.isoformat|safe|escapejs}}";
-                dataObject.station = "{{sensor_data.sensor.station.station_name|escapejs}}";
+                dataObject.station = "{{sensor_data.sensor.station.station_short_name|escapejs}}";
                 dataObject.sensor_type = "{{sensor_data.sensor.sensor_type.sensor_type_name|escapejs}}";
                 data.push(dataObject);
 
@@ -95,8 +98,8 @@
             function initChart() {
                 var timeFormat = d3.time.format.iso;
                 var jsonData = buildDataObject();
-                jsonData.forEach(function(d){
-                     d.datetime = timeFormat.parse(d.datetime);
+                jsonData.forEach(function (d) {
+                    d.datetime = timeFormat.parse(d.datetime);
                 });
                 console.log(jsonData);
                 var dataGroup = d3.nest()
@@ -118,69 +121,154 @@
                         bottom: 20,
                         left: 50
                     },
-                   lSpace = WIDTH/dataGroup.length;
 
-                   timezoneOffset = new Date().getTimezoneOffset();
-                   console.log('my tz' + timezoneOffset);
+                    lSpace = WIDTH / dataGroup.length;
 
-                    xScale = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain(d3.extent(jsonData, function(d){
-                        return d.datetime;
-                    })),
-                    yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(jsonData, function(d) {
+                timezoneOffset = new Date().getTimezoneOffset();
+                console.log('my tz' + timezoneOffset);
+
+                xScale = d3.time.scale().range([MARGINS.left, WIDTH - MARGINS.right]).domain(d3.extent(jsonData, function (d) {
+                    return d.datetime;
+                })),
+                    yScale = d3.scale.linear().range([HEIGHT - MARGINS.top, MARGINS.bottom]).domain([d3.min(jsonData, function (d) {
                         return d.value;
-                    }), d3.max(jsonData, function(d) {
+                    }), d3.max(jsonData, function (d) {
                         return d.value;
                     })]),
                     xAxis = d3.svg.axis()
-                    .scale(xScale).orient("bottom").ticks(10).tickFormat(function(d){
+                        .scale(xScale).orient("bottom").ticks(10).tickFormat(function (d) {
 
 
-                    return moment(d).utcOffset(timezoneOffset).format('HH:mm:ss');
-          }),
+                            return moment(d).utcOffset(timezoneOffset).format('HH:mm:ss');
+                        }),
                     yAxis = d3.svg.axis()
-                    .scale(yScale)
-                    .orient("left");
+                        .scale(yScale)
+                        .orient("left");
 
-                    vis.append("svg:g")
-                        .attr("class", "x axis")
-                        .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
-                        .call(xAxis);
-                    vis.append("svg:g")
-                        .attr("class", "y axis")
-                        .attr("transform", "translate(" + (MARGINS.left) + ",0)")
-                        .call(yAxis);
-                    var lineGen = d3.svg.line()
-                        .x(function(d) {
-                            console.log(xScale(d.datetime));
-                            return xScale(d.datetime);
-                        })
-                        .y(function(d) {
-                            return yScale(d.value);
-                        })
-                        .interpolate("basis");
+                vis.append("svg:g")
+                    .attr("class", "x axis")
+                    .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+                    .call(xAxis);
+                vis.append("svg:g")
+                    .attr("class", "y axis")
+                    .attr("transform", "translate(" + (MARGINS.left) + ",0)")
+                    .call(yAxis);
+                var lineGen = d3.svg.line()
+                    .x(function (d) {
+                        console.log(xScale(d.datetime));
+                        return xScale(d.datetime);
+                    })
+                    .y(function (d) {
+                        return yScale(d.value);
+                    })
+                    .interpolate("basis");
+                var color = d3.scale.category10();
+                legendSpace = WIDTH / dataGroup.length;
 
-                    dataGroup.forEach(function(d, i) {
-                        vis.append('svg:path')
-                            .attr('d', lineGen(d.values))
-                            .attr('stroke', 'blue')
-                            .attr('stroke-width', 2)
-                            .attr('fill', 'none');
+                dataGroup.forEach(function (d, i) {
+                    vis.append('svg:path')
+                        .attr('d', lineGen(d.values))
+                        .style("stroke", function () {
+                            return d.color = color(d.key);
+                        })
+                        .attr('stroke-width', 2)
+                        .attr('fill', 'none');
+
+                    // vis.append("text")                                    // *******
+                    //     .attr("x", (lSpace / 2) + i * lSpace) // spacing // ****
+                    //     .attr("y", HEIGHT + (MARGINS.bottom / 2) + 5)         // *******
+                    //     .attr("class", "legend")    // style the legend   // *******
+                    //     .style("fill", function () { // dynamic colours    // *******
+                    //         return d.color = color(d.key);
+                    //     })             // *******
+                    //     .text(d.key);                                     // *******
+
+
+                    vis.append("text")
+                        .attr("x", (lSpace / 2) + i * lSpace)
+                        .attr("y", HEIGHT + 50)
+                        .style("fill", function () { // dynamic colours    // *******
+                            return d.color = color(d.key);
+                        })
+                        .style("text-anchor", "style")
+                        .attr("class", "legend")
+                        // .style("stroke-opacity", 1.0)
+
+                        // .attr('transform', 'rotate(20 -10 2)')
+                        .on("click", function () {                     // ************
+                            // Determine if current line is visible
+                            var active = d.active ? false : true,
+                                newOpacity = active ? 0 : 1;
+                            console.log('legend active: ' + active);// ************
+                            // Hide or show the elements based on the ID
+                            d3.select("#line" + d.key.replace(/\s+/g, '')) // *********
+                            // ************
+                                .transition()
+                                .style("stroke-opacity", active);       // ************
+                            // Update whether or not the elements are active
+                            d.active = active;                       // ************
+                        })                                       // ************
+                        .text(d.values[0].station);
+
+
+                });
+
+                var x = d3.time.scale();
+                var y = d3.scale.linear();
+                vis.selectAll("g.dot")
+                    .data(dataGroup)
+                    .enter().append("g")
+                    .attr("class", "dot")
+                    .selectAll("circle")
+                    .data(function (d) {
+                        return d.values;
+                    })
+                    .enter().append("circle")
+                    .attr("r", 5)
+                    .attr("cx", function (d, i) {
+                        return x(d.datetime);
+                    })
+                    .attr("cy", function (d, i) {
+                        return y(d.value);
+                    })
+
+                    // Tooltip stuff after this
+                    .on("mouseover", function (d) {              // when the mouse goes over a circle, do the following
+                        div.transition()                  // declare the transition properties to bring fade-in div
+                            .duration(200)                  // it shall take 200ms
+                            .style("opacity", .9);              // and go all the way to an opacity of .9
+                        div.html(d.label + "<br/>" + d.day + "<br/>" + d.value)  // add the text of the tooltip as html
+                            .style("left", (d3.event.pageX) + "px")     // move it in the x direction
+                            .style("top", (d3.event.pageY - 28) + "px");  // move it in the y direction
+                    })                          //
+                    .on("mouseout", function (d) {             // when the mouse leaves a circle, do the following
+                        div.transition()                  // declare the transition properties to fade-out the div
+                            .duration(500)                  // it shall take 500ms
+                            .style("opacity", 0);             // and go all the way to an opacity of nil
                     });
-
-                     // vis.append("text")
-                     //        .attr("x", (lSpace/2)+i*lSpace)
-                     //        .attr("y", HEIGHT)
-                     //        .style("fill", "black")
-                     //        .attr("class","legend")
-                     //        .on('click',function(){
-                     //            var active   = d.active ? false : true;
-                     //            var opacity = active ? 0 : 1;
-                     //            d3.select("#line_" + d.key).style("opacity", opacity);
-                     //            d.active = active;
-                     //        })
-                     //        .text(d.station + d.sensor_type);
+                // var maketip = function (d) {
+                //     var tip = '<p class="tip1">' + NumbType(d.value) + '</p> <p class="tip3">' + moment(d).utcOffset(timezoneOffset).format('HH:mm:ss') + '</p>';
+                //     return tip;
+                // }
+                // var tip = d3.tip()
+                //           .attr('class', 'd3-tip')
+                //           .offset([0, 5])
+                //           .direction('n')
+                //           .html(function(d) {
+                //             return "<b>" + d.key + "</b>";
+                //           })
+                //
+                // vis.selectAll("path")
+                //     .data(dataGroup)
+                //     .enter()
+                //     .append("path")
+                //     .attr("class", "line")
+                //     .on('mouseover', tip.show)
+                //     .on('mouseout', tip.hide)
+                //     .attr("d", function(d) { return lineGen(d.values); });
+                //
+                // vis.call(tip);
             }
-
             initChart();
 
         </script>
@@ -188,7 +276,7 @@
     <!--{% for key,value in request.GET.items %}-->
     <!--{{key}} {{value}}-->
     <!--{% endfor %}-->
-    {{request.GET|length}}
+
     <div id='table'>
 
 
