@@ -204,7 +204,7 @@
                             d3.select("#line" + d.key.replace(/\s+/g, '')) // *********
                             // ************
                                 .transition()
-                                .style("stroke-opacity", active);       // ************
+                                .style("opacity", active);       // ************
                             // Update whether or not the elements are active
                             d.active = active;                       // ************
                         })                                       // ************
@@ -212,9 +212,10 @@
 
 
                 });
+var div = d3.select('#visualisation').append("div") // declare the properties for the div used for the tooltips
+  .attr("class", "tooltip")       // apply the 'tooltip' class
+  .style("opacity", 1);
 
-                var x = d3.time.scale();
-                var y = d3.scale.linear();
                 vis.selectAll("g.dot")
                     .data(dataGroup)
                     .enter().append("g")
@@ -226,18 +227,19 @@
                     .enter().append("circle")
                     .attr("r", 5)
                     .attr("cx", function (d, i) {
-                        return x(d.datetime);
+                        return xScale(d.datetime);
                     })
                     .attr("cy", function (d, i) {
-                        return y(d.value);
+                        return yScale(d.value);
                     })
 
                     // Tooltip stuff after this
-                    .on("mouseover", function (d) {              // when the mouse goes over a circle, do the following
+                    .on("mouseover", function (d) {
+                        console.log("test mouseover")// when the mouse goes over a circle, do the following
                         div.transition()                  // declare the transition properties to bring fade-in div
                             .duration(200)                  // it shall take 200ms
                             .style("opacity", .9);              // and go all the way to an opacity of .9
-                        div.html(d.label + "<br/>" + d.day + "<br/>" + d.value)  // add the text of the tooltip as html
+                        div.html("this is the tool tip ")  // add the text of the tooltip as html
                             .style("left", (d3.event.pageX) + "px")     // move it in the x direction
                             .style("top", (d3.event.pageY - 28) + "px");  // move it in the y direction
                     })                          //
@@ -246,28 +248,7 @@
                             .duration(500)                  // it shall take 500ms
                             .style("opacity", 0);             // and go all the way to an opacity of nil
                     });
-                // var maketip = function (d) {
-                //     var tip = '<p class="tip1">' + NumbType(d.value) + '</p> <p class="tip3">' + moment(d).utcOffset(timezoneOffset).format('HH:mm:ss') + '</p>';
-                //     return tip;
-                // }
-                // var tip = d3.tip()
-                //           .attr('class', 'd3-tip')
-                //           .offset([0, 5])
-                //           .direction('n')
-                //           .html(function(d) {
-                //             return "<b>" + d.key + "</b>";
-                //           })
-                //
-                // vis.selectAll("path")
-                //     .data(dataGroup)
-                //     .enter()
-                //     .append("path")
-                //     .attr("class", "line")
-                //     .on('mouseover', tip.show)
-                //     .on('mouseout', tip.hide)
-                //     .attr("d", function(d) { return lineGen(d.values); });
-                //
-                // vis.call(tip);
+
             }
             initChart();
 
