@@ -13,7 +13,7 @@
         .axis path {
             fill: none;
             stroke: #777;
-            shape-rendering: crispEdges;
+            shape-rendering: auto;
         }
         .axis text {
             font-family: Lato;
@@ -25,6 +25,45 @@
             text-anchor: start;
             position: relative;
         }
+        circle {
+          fill: white;
+          stroke: #ed1e79;
+          stroke-width: 3;
+        }
+    .x.axis path {
+  display: none;
+}
+
+.d3-tip {
+  line-height: 1;
+  font-weight: bold;
+  padding: 12px;
+  background: rgba(0, 0, 0, 0.8);
+  color: #fff;
+  border-radius: 2px;
+}
+
+/* Creates a small triangle extender for the tooltip */
+.d3-tip:after {
+  box-sizing: border-box;
+  display: inline;
+  font-size: 10px;
+  width: 100%;
+  line-height: 1;
+  color: rgba(0, 0, 0, 0.8);
+  content: "\25BC";
+  position: absolute;
+  text-align: center;
+}
+
+/* Style northward tooltips differently */
+.d3-tip.n:after {
+  margin: -1px 0 0 0;
+  top: 100%;
+  left: 0;
+
+}
+
 
 
 </style>
@@ -94,6 +133,11 @@
                 {%endfor %}
                 return data;
             }
+            var unit;
+           {%for sensor_data in sensor_data_list|slice:":1" %}
+           unit = "{{sensor_data.sensor.sensor_type.unit|escapejs}}";
+            {% endfor %}
+            console.log(unit);
 
             function initChart() {
                 var timeFormat = d3.time.format.iso;
@@ -148,11 +192,18 @@
                 vis.append("svg:g")
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
+
                     .call(xAxis);
                 vis.append("svg:g")
                     .attr("class", "y axis")
                     .attr("transform", "translate(" + (MARGINS.left) + ",0)")
-                    .call(yAxis);
+                    .call(yAxis).append("text")
+                      .attr("transform", "rotate(-90)")
+                      .attr("y", 6)
+                      .attr("dy", ".71em")
+                      .style("text-anchor", "end")
+                      .text(unit);
+
                 var lineGen = d3.svg.line()
                     .x(function (d) {
                         console.log(xScale(d.datetime));
@@ -161,7 +212,7 @@
                     .y(function (d) {
                         return yScale(d.value);
                     })
-                    .interpolate("basis");
+                    .interpolate("linear");
                 var color = d3.scale.category10();
                 legendSpace = WIDTH / dataGroup.length;
 
@@ -174,14 +225,6 @@
                         .attr('stroke-width', 2)
                         .attr('fill', 'none');
 
-                    // vis.append("text")                                    // *******
-                    //     .attr("x", (lSpace / 2) + i * lSpace) // spacing // ****
-                    //     .attr("y", HEIGHT + (MARGINS.bottom / 2) + 5)         // *******
-                    //     .attr("class", "legend")    // style the legend   // *******
-                    //     .style("fill", function () { // dynamic colours    // *******
-                    //         return d.color = color(d.key);
-                    //     })             // *******
-                    //     .text(d.key);                                     // *******
 
 
                     vis.append("text")
@@ -190,11 +233,8 @@
                         .style("fill", function () { // dynamic colours    // *******
                             return d.color = color(d.key);
                         })
-                        .style("text-anchor", "style")
+                        .style("text-anchor", "middle")
                         .attr("class", "legend")
-                        // .style("stroke-opacity", 1.0)
-
-                        // .attr('transform', 'rotate(20 -10 2)')
                         .on("click", function () {                     // ************
                             // Determine if current line is visible
                             var active = d.active ? false : true,
@@ -202,7 +242,6 @@
                             console.log('legend active: ' + active);// ************
                             // Hide or show the elements based on the ID
                             d3.select("#line" + d.key.replace(/\s+/g, '')) // *********
-                            // ************
                                 .transition()
                                 .style("opacity", active);       // ************
                             // Update whether or not the elements are active
@@ -212,9 +251,20 @@
 
 
                 });
-var div = d3.select('#visualisation').append("div") // declare the properties for the div used for the tooltips
-  .attr("class", "tooltip")       // apply the 'tooltip' class
-  .style("opacity", 1);
+                var div = d3.select('#visualisation').append("g") // declare the properties for the div used for the tooltips
+                  .attr("class", "tooltip")
+                // apply the 'tooltip' class
+                  .style("opacity", 1);
+
+                  var tip = d3.tip()
+                  .attr('class', 'd3-tip')
+                  .offset([-10, 0])
+                  .html(function(d) {
+                    return "<strong>Datetime:</strong> <span style='color:red'>" + moment(d.datetime).utcOffset(timezoneOffset).format('YYYY-MM-DD HH:mm:ss') + "</span>" +
+                        "</br><strong>Value:</strong> <span style='color:red'>" + d.value + "</span>"
+                        +"</br><strong>Station:</strong> <span style='color:red'>" + d.station + "</span>";
+                  });
+                  vis.call(tip);
 
                 vis.selectAll("g.dot")
                     .data(dataGroup)
@@ -232,22 +282,11 @@ var div = d3.select('#visualisation').append("div") // declare the properties fo
                     .attr("cy", function (d, i) {
                         return yScale(d.value);
                     })
+                    .style("fill", "white")
+                    .style("stroke", "#ed1e79")
+                    .on('mouseover', tip.show)
+                    .on('mouseout', tip.hide);
 
-                    // Tooltip stuff after this
-                    .on("mouseover", function (d) {
-                        console.log("test mouseover")// when the mouse goes over a circle, do the following
-                        div.transition()                  // declare the transition properties to bring fade-in div
-                            .duration(200)                  // it shall take 200ms
-                            .style("opacity", .9);              // and go all the way to an opacity of .9
-                        div.html("this is the tool tip ")  // add the text of the tooltip as html
-                            .style("left", (d3.event.pageX) + "px")     // move it in the x direction
-                            .style("top", (d3.event.pageY - 28) + "px");  // move it in the y direction
-                    })                          //
-                    .on("mouseout", function (d) {             // when the mouse leaves a circle, do the following
-                        div.transition()                  // declare the transition properties to fade-out the div
-                            .duration(500)                  // it shall take 500ms
-                            .style("opacity", 0);             // and go all the way to an opacity of nil
-                    });
 
             }
             initChart();
