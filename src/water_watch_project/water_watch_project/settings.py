@@ -170,6 +170,6 @@ LOGOUT_REDIRECT_URL = '/'
 
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
-    os.path.join(BASE_DIR, "static"),
-    '/var/www/static/',
+    # os.path.join(os.path.normpath(BASE_DIR), "static"),
+    # '/var/www/static/',
 ]
