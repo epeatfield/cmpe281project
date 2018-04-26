@@ -6,7 +6,7 @@ from rest_framework import permissions as rest_framework_permissions
 from .. import permissions as custom_permissions
 
 from ..models import SensorData
-from ..serializers import SensorDataSerializer, SensorDataCreateSerializer
+from ..serializers import SensorDataSerializer, SensorDataCreateSerializer, SensorDataRetrieveUpdateDestroySerializer
 
 
 class SensorDataFilter(filters.FilterSet):

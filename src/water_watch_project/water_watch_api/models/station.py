@@ -49,3 +49,8 @@ class Station(models.Model):
         point = "POINT(%s %s)" % (self.longitude, self.latitude)
         self.location = geos.fromstr(point)
         super(Station, self).save()
+
+    def get_sensor_data_set(self):
+        print("Debug");
+        print (self.sensor_set.all());
+        return self.sensor_set.all();

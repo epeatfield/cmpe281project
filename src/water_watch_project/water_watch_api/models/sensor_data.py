@@ -6,7 +6,7 @@ class SensorData(models.Model):
 
     class Meta:
         db_table = 'sensor_data'
-        ordering = ['id', 'sensor_data_dateTime']
+        ordering = ['id', 'sensor_data_dateTime', 'sensor__station_id', 'sensor__sensor_type_id']
         verbose_name_plural = "sensor data"
         unique_together = (('sensor', 'sensor_data_dateTime'),)
     sensor = models.ForeignKey(Sensor, on_delete=models.CASCADE)
