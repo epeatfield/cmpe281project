@@ -14,7 +14,8 @@
     <h2>  {% block heading %}Sign Up Here{% endblock %}</h2>
   </p>
   {% block myform %}
-  <form method="post" align="left">
+  <form method="post">
+
     {% csrf_token %} {% for field in form %}
     <br>
     <h3>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
