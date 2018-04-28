@@ -3,6 +3,7 @@ from water_watch_api.views.station_map_view import StationMapView
 from water_watch_api.views.dashboard_sensor_data_view import DashboardSensorDataView
 from water_watch_api.views.sign_up_view import SignUpView
 from water_watch_api.views.sign_in_view import SignInView
+from water_watch_api.views.home_auth_page_view import HomeAuthPageView
 
 from water_watch_api.views.about_us_view import AboutUsView
 from water_watch_api.views.contact_view import ContactView
