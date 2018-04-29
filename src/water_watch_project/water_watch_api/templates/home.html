@@ -103,35 +103,35 @@
   <div class="container-fluid bg-3 text-center">
     <h3 class="margin">Features</h3><br>
     <div class="row">
-      <a href="{% url 'projectdetail' %}">
+      <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/projectdetail">
         <div class="col-md-2 col-md-offset-1">
           <p>Project Details</p>
           <br>
           <img src="{% static 'proj_details2.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
-      <a href="{% url 'dashboard' %}">
+      <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/dashboard">
         <div class="col-md-2">
           <p>Dashboard</p>
           <br>
           <img src="{% static 'dashboard.png' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
-      <a href="{% url 'stationmap' %}">
+      <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/station_map">
         <div class="col-md-2">
           <p>Station Map</p>
           <br>
           <img src="{% static 'station_map.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
-      <a href="{% url 'aboutus' %}">
+      <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/aboutus">
         <div class="col-md-2">
           <p>About Us</p>
           <br>
           <img src="{% static 'about_us.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
         </div>
       </a>
-      <a href="{% url 'contact' %}">
+      <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/contact">
         <div class="col-md-2">
           <p>Contact</p>
           <br>
@@ -254,7 +254,7 @@
 <div class="container-fluid bg-3 text-center">
   <h3 class="margin">Features</h3><br>
   <div class="row">
-    <a href="{% url 'projectdetail' %}">
+    <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/projectdetail">
       <div class="col-sm-3">
         <p>Project Details</p>
         <img src="{% static 'proj_details2.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
@@ -268,15 +268,15 @@
         <img src="{% static 'signup2.png' %}" class="img-responsive margin" style="width:100%" alt="Image">
       </div>
     </a>
-    <a href="{% url 'aboutus' %}">
+    <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/aboutus">
       <div class="col-sm-3">
         <p>About Us</p>
         <img src="{% static 'about_us.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
       </div>
     </a>
-    <a href="{% url 'contact' %}">
+    <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/contact">
       <div class="col-sm-3">
-        <p>Contact</p>
+        <p>Contact </p>
         <br>
         <img src="{% static 'contact.jpg' %}" class="img-responsive margin" style="width:100%" alt="Image">
       </div>
@@ -286,7 +286,7 @@
 
 <!-- Footer -->
 <footer class="container-fluid bg-4 text-center">
-  <p>Project: CMPE 281 (Group 3) Git: <a href="https://www.w3schools.com">http://xyz.com</a></p>
+  <p>Project: CMPE 281 (Group 3) Git {{ request.META.HTTP_HOST }}: <a href="https://www.w3schools.com">http://xyz.com</a></p>
 </footer>
 
 </body>
