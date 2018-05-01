@@ -92,31 +92,8 @@
 {% endif %}
 {% block content %}
 <div id='dashboard'>
-    <form id="searchForm" name="myForm" method="get">
-        <div class="well">
-            <h3 style="margin-top: 0">Filter</h3>
-            <div class="row">
-
-                <div class="form-group col-sm-8 col-md-6">
-                    {%for field in filter.form%}
-                    <h4>
-                        {{ field.label_tag }}
-                        {{ field }}
-                    </h4>
-
-                    {% endfor %}
 
 
-                </div>
-            </div>
-            <button type="submit" class="btn btn-primary">
-                <span class="glyphicon glyphicon-search"></span> Search
-            </button>
-            <script type="text/javascript">
-
-            </script>
-        </div>
-    </form>
     <div id='bubble_chart' >
         <div id="bubble_svg" width="300" height="300"></div>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
@@ -245,8 +222,151 @@
             }).trigger("resize");
         </script>
     </div>
+      <div id='bubble_chart1'>
+        <svg id="bubble_svg1" width="500" height="500"></svg>
+        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+        <script>
 
+var root = {
+                "name": "flare",
+                "children": [
+                    {
+                        "name": "Station",
+                        "children": [
+                            {"name": "station", "size": 10}
+                        ]
+                    },
+                    {
+                        "name": "Sensor type",
+                        "children": [
+                            {"name": "sensor type", "size": 6},
+                        ]
+                    },
+                    {
+                        "name": "Sensor",
+                        "children": [
+                            {"name": "sensor", "size": 24},
+                        ]
+                    },
+                    {
+                        "name": "Avg",
+                        "children": [
+                            {"name": "average sensor", "size": 5},
+                        ]
+                    },
+                     {
+                        "name": "User",
+                        "children": [
+                            {"name": "user", "size": 20},
+                        ]
+                    }
+                ]
+
+            };
+
+
+            var diameter = 960,
+                format = d3.format(",d"),
+                color = d3.scale.category10();
+
+            var bubble = d3.layout.pack()
+                .sort(null)
+                .size([diameter, diameter])
+                .padding(1.5);
+
+            var svg = d3.select("#bubble_svg1").append("svg")
+                .attr("viewBox", "0 0 960 960")
+                .attr("perserveAspectRatio", "xMinYMid")
+                .attr("width", diameter)
+                .attr("height", diameter)
+                .attr("class", "bubble");
+
+            //d3.json("flare.json", function(error, root) {
+            var node = svg.selectAll(".node")
+                .data(bubble.nodes(classes(root))
+                    .filter(function (d) {
+                        return !d.children;
+                    }))
+                .enter().append("g")
+                .attr("class", "node")
+                .attr("transform", function (d) {
+                    return "translate(" + d.x + "," + d.y + ")";
+                });
+
+            node.append("title")
+                .text(function (d) {
+                    return d.className + ": " + format(d.value);
+                });
+
+            node.append("circle")
+                .attr("r", function (d) {
+                    return d.r;
+                })
+                .style("fill", function (d) {
+                    return color(d.packageName);
+                });
+
+            node.append("text")
+                .attr("dy", ".3em")
+                .style("text-anchor", "middle")
+                .text(function (d) {
+                    return d.className.substring(0, d.r / 3);
+                });
+            //});
+
+            // Returns a flattened hierarchy containing all leaf nodes under the root.
+            function classes(root) {
+                var classes = [];
+
+                function recurse(name, node) {
+                    if (node.children) node.children.forEach(function (child) {
+                        recurse(node.name, child);
+                    });
+                    else classes.push({packageName: name, className: node.name, value: node.size});
+                }
+
+                recurse(null, root);
+                return {children: classes};
+            }
+
+            //d3.select(self.frameElement).style("height", diameter + "px");
+
+            var chart = $(".bubble"),
+                aspect = chart.width() / chart.height(),
+                container = chart.parent();
+            $(window).on("resize", function () {
+                var targetWidth = container.width();
+                chart.attr("width", 500);
+                chart.attr("height", 500);
+            }).trigger("resize");
+        </script>
+    </div>
     <div id='chart'>
+        <form id="searchForm" name="myForm" method="get">
+            <div class="well">
+                <h3 style="margin-top: 0">Filter</h3>
+                <div class="row">
+
+                    <div class="form-group col-sm-8 col-md-6">
+                        {%for field in filter.form%}
+                        <h4>
+                            {{ field.label_tag }}
+                            {{ field }}
+                        </h4>
+
+                        {% endfor %}
+
+
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>
+                <script type="text/javascript">
+
+                </script>
+            </div>
+        </form>
         <svg id="visualisation" width="1050" height="600"></svg>
         <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
         <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
