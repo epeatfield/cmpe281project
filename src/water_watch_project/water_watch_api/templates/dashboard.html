@@ -73,6 +73,7 @@
     }
 
 
+
 </style>
 
 
@@ -93,256 +94,246 @@
 {% block content %}
 <div id='dashboard'>
 
+    <div class='bubble_container' style='display: flex'>
+        <div class ='bubble_chart_v4' >
+        <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+        <div id = 'bubble_svg_v4'>
+            <script type="text/javascript">
 
-    <div id='bubble_chart' >
-        <div id="bubble_svg" width="300" height="300"></div>
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-        <script>
+        dataset = {
+            "children": [{"Name":"Station","Count":10, "Label": 10},
+                {"Name":"Active Station","Count":6, "Label": 6},
+                {"Name":"Inactive Station","Count":4, "Label": 4},
+                {"Name":"Sensor Type","Count":7, "Label": 7},
+                {"Name":"Sensor","Count":24, "Label": 24},
+                {"Name":"Average Sensor","Count":5, "Label": 5},
+                {"Name":"User","Count":20, "Label": 20}
+                // {"Name":"Sensor Data in 2018","Count":500, "Label": 50000},
+                // {"Name":"Sensor Data in 2017","Count":7000, "Label": 700000},
+                // {"Name":"Sensor Data in 2016","Count":8000, "Label": 800000},
+                // {"Name":"Sensor Data in 2015","Count":9000, "Label": 900000},
+                // {"Name":"Sensor Data in 2014","Count":7000, "Label": 700000}
+               ]
+        };
+        var format = d3.format(",d");
+        var diameter = 400;
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
 
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
 
-           var root = {
-                "name": "flare",
-                "children": [
-                    {
-                        "name": "2015",
-                        "children": [
-                            {"name": "2015 sensor", "size": 800000}
-                        ]
-                    },
-                    {
-                        "name": "2016",
-                        "children": [
-                            {"name": "2016", "size": 500000},
-                        ]
-                    },
-                    {
-                        "name": "2017",
-                        "children": [
-                            {"name": "2017", "size": 1000000},
-                        ]
-                    },
-                    {
-                        "name": "2018",
-                        "children": [
-                            {"name": "2018", "size": 50000},
-                        ]
-                    }
-                ]
+        var svg = d3.select("#bubble_svg_v4")
+            .append("svg")
+            .attr("width", diameter + 100)
+            .attr("height", diameter + 100)
+            .attr("class", "bubble");
 
-            };
+        var nodes = d3.hierarchy(dataset)
+            .sum(function(d) { return d.Count; });
 
-            var diameter = 960,
-                format = d3.format(",d"),
-                color = d3.scale.category10();
+        var node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
 
-            var bubble = d3.layout.pack()
-                .sort(null)
-                .size([diameter, diameter])
-                .padding(1.5);
+        node.append("title")
+            .text(function(d) {
+                return d.data.Name + ": " + format(d.data.Count);
+            });
 
-            var svg = d3.select("#bubble_svg").append("svg")
-                .attr("viewBox", "0 0 960 960")
-                .attr("perserveAspectRatio", "xMinYMid")
-                .attr("width", diameter)
-                .attr("height", diameter)
-                .attr("class", "bubble");
-            svg.append("text")
+        node.append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d,i) {
+                return color(i);
+            });
+
+        node.append("text")
+            .attr("dy", ".2em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.Name.substring(0, d.r / 2);
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        node.append("text")
+            .attr("dy", "1.3em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.Count;
+            })
+            .attr("font-family",  "Gill Sans", "Gill Sans MT")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        d3.select(self.frameElement)
+            .style("height", diameter + "px");
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        var node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+         svg.append("text")
         .attr("x", (diameter / 2))
         .attr("y", diameter)
         .attr("text-anchor", "middle")
         .style("font-size", "16px")
-        .style("text-decoration", "underline")
+        .text("Statistics")
+
+
+
+	</script>
+        </div>
+    </div>
+        <div class ='bubble_chart_v5'>
+        <script type="text/javascript" src="https://d3js.org/d3.v4.min.js"></script>
+        <div id = 'bubble_svg_v5'>
+            <script type="text/javascript">
+
+        dataset = {"children": [
+            // "children": [{"Name":"Station","Count":10, "Label": 10},
+            //     {"Name":"Active Station","Count":6, "Label": 6},
+            //     {"Name":"Inactive Station","Count":4, "Label": 4},
+            //     {"Name":"Sensor Type","Count":7, "Label": 7},
+            //     {"Name":"Sensor","Count":24, "Label": 24},
+            //     {"Name":"Average Sensor","Count":5, "Label": 5},
+            //     {"Name":"User","Count":20, "Label": 20}
+                {"Name":"2018","Count":50000, "Label": 50000},
+                {"Name":"2017","Count":700000, "Label": 700000},
+                {"Name":"2016","Count":800000, "Label": 800000},
+                {"Name":"2015","Count":900000, "Label": 900000},
+                {"Name":"2014","Count":700000, "Label": 700000}
+               ]
+        };
+        var format = d3.format(",d");
+        var diameter = 400;
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        var svg = d3.select("#bubble_svg_v5")
+            .append("svg")
+            .attr("width", diameter + 100)
+            .attr("height", diameter + 100)
+            .attr("class", "bubble");
+
+        var nodes = d3.hierarchy(dataset)
+            .sum(function(d) { return d.Count; });
+
+        var node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+
+        node.append("title")
+            .text(function(d) {
+                return d.data.Name + ": " + format(d.data.Count);
+            });
+
+        node.append("circle")
+            .attr("r", function(d) {
+                return d.r;
+            })
+            .style("fill", function(d,i) {
+                return color(i);
+            });
+
+        node.append("text")
+            .attr("dy", ".2em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.Name.substring(0, d.r / 2);
+            })
+            .attr("font-family", "sans-serif")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        node.append("text")
+            .attr("dy", "1.3em")
+            .style("text-anchor", "middle")
+            .text(function(d) {
+                return d.data.Count;
+            })
+            .attr("font-family",  "Gill Sans", "Gill Sans MT")
+            .attr("font-size", function(d){
+                return d.r/5;
+            })
+            .attr("fill", "white");
+
+        d3.select(self.frameElement)
+            .style("height", diameter + "px");
+        var color = d3.scaleOrdinal(d3.schemeCategory20);
+
+        var bubble = d3.pack(dataset)
+            .size([diameter, diameter])
+            .padding(1.5);
+
+        var node = svg.selectAll(".node")
+            .data(bubble(nodes).descendants())
+            .enter()
+            .filter(function(d){
+                return  !d.children
+            })
+            .append("g")
+            .attr("class", "node")
+            .attr("transform", function(d) {
+                return "translate(" + d.x + "," + d.y + ")";
+            });
+         svg.append("text")
+        .attr("x", (diameter / 2))
+        .attr("y", diameter)
+        .attr("text-anchor", "middle")
+        .style("font-size", "16px")
         .text("Sensor Data Rows")
-            .style("font", "50px sans-serif");
-
-            //d3.json("flare.json", function(error, root) {
-            var node = svg.selectAll(".node")
-                .data(bubble.nodes(classes(root))
-                    .filter(function (d) {
-                        return !d.children;
-                    }))
-                .enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-
-            node.append("title")
-                .text(function (d) {
-                    return d.className + ": " + format(d.value);
-                });
 
 
 
-            node.append("circle")
-                .attr("r", function (d) {
-                    return d.r;
-                })
-                .style("fill", function (d) {
-                    return color(d.packageName);
-                });
-
-            node.append("text")
-                .attr("dy", ".3em")
-                .style("text-anchor", "middle")
-                .style("font", "50px sans-serif")
-                .text(function (d) {
-                    return d.className.substring(0, d.r / 3);
-                });
-            //});
-
-            // Returns a flattened hierarchy containing all leaf nodes under the root.
-            function classes(root) {
-                var classes = [];
-
-                function recurse(name, node) {
-                    if (node.children) node.children.forEach(function (child) {
-                        recurse(node.name, child);
-                    });
-                    else classes.push({packageName: name, className: node.name, value: node.size});
-                }
-
-                recurse(null, root);
-                return {children: classes};
-            }
-
-            //d3.select(self.frameElement).style("height", diameter + "px");
-
-            var chart = $(".bubble"),
-                aspect = chart.width() / chart.height(),
-                container = chart.parent();
-            console.log('chart');
-            console.log(chart);
-            $(window).on("resize", function () {
-                var targetWidth = container.width();
-                console.log ('targetWidth ' + targetWidth);
-                chart.attr("width", 500);
-                chart.attr("height", 500);
-            }).trigger("resize");
-        </script>
+	</script>
+        </div>
     </div>
-      <div id='bubble_chart1'>
-        <svg id="bubble_svg1" width="500" height="500"></svg>
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script>
-
-var root = {
-                "name": "flare",
-                "children": [
-                    {
-                        "name": "Station",
-                        "children": [
-                            {"name": "station", "size": 10}
-                        ]
-                    },
-                    {
-                        "name": "Sensor type",
-                        "children": [
-                            {"name": "sensor type", "size": 6},
-                        ]
-                    },
-                    {
-                        "name": "Sensor",
-                        "children": [
-                            {"name": "sensor", "size": 24},
-                        ]
-                    },
-                    {
-                        "name": "Avg",
-                        "children": [
-                            {"name": "average sensor", "size": 5},
-                        ]
-                    },
-                     {
-                        "name": "User",
-                        "children": [
-                            {"name": "user", "size": 20},
-                        ]
-                    }
-                ]
-
-            };
-
-
-            var diameter = 960,
-                format = d3.format(",d"),
-                color = d3.scale.category10();
-
-            var bubble = d3.layout.pack()
-                .sort(null)
-                .size([diameter, diameter])
-                .padding(1.5);
-
-            var svg = d3.select("#bubble_svg1").append("svg")
-                .attr("viewBox", "0 0 960 960")
-                .attr("perserveAspectRatio", "xMinYMid")
-                .attr("width", diameter)
-                .attr("height", diameter)
-                .attr("class", "bubble");
-
-            //d3.json("flare.json", function(error, root) {
-            var node = svg.selectAll(".node")
-                .data(bubble.nodes(classes(root))
-                    .filter(function (d) {
-                        return !d.children;
-                    }))
-                .enter().append("g")
-                .attr("class", "node")
-                .attr("transform", function (d) {
-                    return "translate(" + d.x + "," + d.y + ")";
-                });
-
-            node.append("title")
-                .text(function (d) {
-                    return d.className + ": " + format(d.value);
-                });
-
-            node.append("circle")
-                .attr("r", function (d) {
-                    return d.r;
-                })
-                .style("fill", function (d) {
-                    return color(d.packageName);
-                });
-
-            node.append("text")
-                .attr("dy", ".3em")
-                .style("text-anchor", "middle")
-                .text(function (d) {
-                    return d.className.substring(0, d.r / 3);
-                });
-            //});
-
-            // Returns a flattened hierarchy containing all leaf nodes under the root.
-            function classes(root) {
-                var classes = [];
-
-                function recurse(name, node) {
-                    if (node.children) node.children.forEach(function (child) {
-                        recurse(node.name, child);
-                    });
-                    else classes.push({packageName: name, className: node.name, value: node.size});
-                }
-
-                recurse(null, root);
-                return {children: classes};
-            }
-
-            //d3.select(self.frameElement).style("height", diameter + "px");
-
-            var chart = $(".bubble"),
-                aspect = chart.width() / chart.height(),
-                container = chart.parent();
-            $(window).on("resize", function () {
-                var targetWidth = container.width();
-                chart.attr("width", 500);
-                chart.attr("height", 500);
-            }).trigger("resize");
-        </script>
     </div>
-    <div id='chart'>
-        <form id="searchForm" name="myForm" method="get">
+    {% if user.is_authenticated %}
+    <div id='chart' style="display: flex">
+        <div style="width: 400px; height: 500px">
+            <form id="searchForm" name="myForm" method="get">
             <div class="well">
                 <h3 style="margin-top: 0">Filter</h3>
                 <div class="row">
@@ -367,13 +358,16 @@ var root = {
                 </script>
             </div>
         </form>
-        <svg id="visualisation" width="1050" height="600"></svg>
-        <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone.js"></script>
-        <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone-with-data.min.js"></script>
-        <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
-        <script>
+        </div>
+        <div>
+            {% if request.GET|length > 0 %}
+                <svg id="visualisation" width="1050" height="600"></svg>
+                <script src="http://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.11.1/moment.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone.js"></script>
+                <script src="https://cdnjs.cloudflare.com/ajax/libs/moment-timezone/0.5.16/moment-timezone-with-data.min.js"></script>
+                <script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+                <script>
             function buildDataObject() {
                 var data = [];
                 {%for sensor_data in sensor_data_list %}
@@ -412,7 +406,7 @@ var root = {
                 var color = d3.scale.category10();
 
                 var vis = d3.select("#visualisation"),
-                    WIDTH = 1000,
+                    WIDTH = 700,
                     HEIGHT = 500,
                     MARGINS = {
                         top: 20,
@@ -547,14 +541,16 @@ var root = {
             initChart();
 
         </script>
+            {% else %}
+            <h3>No data to display in chart.</h3>
+            {% endif %}
+        </div>
     </div>
     <!--{% for key,value in request.GET.items %}-->
     <!--{{key}} {{value}}-->
     <!--{% endfor %}-->
 
     <div id='table'>
-
-
         <table class="table table-bordered">
             <thead>
             <tr>
@@ -604,7 +600,9 @@ var root = {
         {% endif %}
     </ul>
     {% endif %}
-
+    {% else %}
+    <h3>Please sign in to view sensor data information</h3>
+    {% endif %}
 </div>
 
 <br>

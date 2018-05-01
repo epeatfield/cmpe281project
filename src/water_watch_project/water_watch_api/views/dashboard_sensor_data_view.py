@@ -29,6 +29,6 @@ class DashboardSensorDataView(FilterView):
     template_name = 'dashboard.html'
     filterset_class = DashboardSensorDataFilter
     context_object_name = 'sensor_data_list'
-    paginate_by = 30
+    paginate_by = 25
     model = SensorData
 
