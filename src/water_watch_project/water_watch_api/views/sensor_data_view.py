@@ -12,13 +12,14 @@ from ..serializers import SensorDataSerializer, SensorDataCreateSerializer, Sens
 class SensorDataFilter(filters.FilterSet):
     min_value = filters.NumberFilter(name="sensor_data_value", lookup_expr='gte')
     max_value = filters.NumberFilter(name="sensor_data_value", lookup_expr='lte')
-    sensor_id = filters.NumberFilter(name="sensor_id",)
+    station_id = filters.NumberFilter(name="sensor__station_id")
+    sensor_type_id = filters.NumberFilter(name="sensor__sensor_type_id")
     start_date = filters.DateTimeFilter(name="sensor_data_dateTime", lookup_expr='gte')
     end_date = filters.DateTimeFilter(name="sensor_data_dateTime", lookup_expr='lte')
 
     class Meta:
         model = SensorData
-        fields = ['min_value', 'max_value','sensor_id','start_date','end_date']
+        fields = ['min_value', 'max_value','station_id', 'sensor_type_id', 'start_date','end_date']
 
 
 class StandardResultsSetPagination(PageNumberPagination):
@@ -31,12 +32,9 @@ class SensorDataListCreateView(generics.ListCreateAPIView):
     queryset = SensorData.objects.all()
     serializer_class = SensorDataSerializer
     filter_class = SensorDataFilter
-    filter_backends = (filters.DjangoFilterBackend,)#rest_framework.filters.SearchFilter, rest_framework.filters.OrderingFilter)
+    filter_backends = (filters.DjangoFilterBackend,)
     pagination_class = StandardResultsSetPagination
     permission_classes = (rest_framework_permissions.IsAuthenticated, custom_permissions.IsAdminOrReadOnly)
-    #search_fields = ('sensor__station__station_name', 'sensor_data_value',
-        #    'sensor__sensor_type__sensor_type_name')
-    #ordering_fields = ('sensor__station__station_name', 'sensor__sensor_type__sensor_type_name','sensor_data_value',)
 
 
     def get_serializer_class(self):
