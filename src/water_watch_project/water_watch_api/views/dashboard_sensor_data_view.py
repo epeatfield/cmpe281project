@@ -1,6 +1,7 @@
 from ..models import SensorData, Station, Sensor, SensorType
 from rest_framework.renderers import TemplateHTMLRenderer
 from django_filters.views import FilterView
+from django_filters.filters import OrderingFilter
 from django import forms
 import django_filters as filters
 
@@ -14,6 +15,13 @@ class DashboardSensorDataFilter(filters.FilterSet):
                                       widget=forms.DateTimeInput(attrs={'type': 'datetime-local'}))
     sensor_type = filters.ModelChoiceFilter(label="Sensor Type *", name="sensor__sensor_type_id", queryset=SensorType.objects.all(),
                                           widget=forms.Select,required=True)
+    order_by_field = 'ordering'
+    ordering = OrderingFilter(
+        # fields(('model field name', 'parameter name'),)
+        fields=(
+            ('sensor_data_dateTime', 'sensor_data_dateTime')
+        )
+    )
 
 
 
