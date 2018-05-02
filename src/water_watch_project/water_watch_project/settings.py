@@ -45,6 +45,10 @@ INSTALLED_APPS = [
     'rangefilter',
     'water_watch_api',
     'django.contrib.gis',
+    'health_check',
+    'health_check.db',
+    'health_check.cache',
+    'health_check.storage',
 
 
 
