@@ -18,7 +18,6 @@ urlpatterns = [
     url(r'sensor_maintenance_history/(?P<pk>\w+)$', views.SensorMaintenanceHistoryRetrieveUpdateDestroyView.as_view()),
     url(r'sensor_maintenance_history/$', views.SensorMaintenanceHistoryListCreateView.as_view()),
     url('signup/', views.SignUpView.as_view(), name='signup'),
-    url('signin/', views.SignInView.as_view(), name='signin'),
     url(r'^api-token-auth/', authviews.obtain_auth_token),
 
     url(r'sensor/(?P<pk>\w+)$', views.SensorRetrieveUpdateDestroyView.as_view()),
