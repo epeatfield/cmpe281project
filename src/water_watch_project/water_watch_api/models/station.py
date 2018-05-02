@@ -23,7 +23,7 @@ class Station(models.Model):
     )
     usgs_site_code = models.CharField(max_length=20)
     station_name = models.CharField(max_length=255, unique=True)
-    station_short_name = models.CharField(max_length=255, null=True)
+    station_short_name = models.CharField(max_length=255, null=True, default="Short Name")
     us_state_cd = models.CharField(max_length=2)
     longitude = models.DecimalField(max_digits=15, decimal_places=12)
     latitude = models.DecimalField(max_digits=15, decimal_places=12)
@@ -37,7 +37,7 @@ class Station(models.Model):
     REQUIRED_FIELDS = ('station_name', 'us_state_cd', 'longitude', 'latitude')
 
     def __str__(self):
-        return self.station_name
+        return self.station_short_name
 
     def natural_key(self):
         return self.station_name
