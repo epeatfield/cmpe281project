@@ -333,8 +333,8 @@
     {% if user.is_authenticated %}
     <div id='chart' style="display: flex">
         <div style="width: 400px; height: 500px">
-            <form id="searchForm" name="myForm" method="get">
-            <div class="well">
+            <form id="searchForm" name="myForm" method="get" >
+            <div class="well" style="background-color:antiquewhite">
                 <h3 style="margin-top: 0">Filter</h3>
                 <div class="row">
 
@@ -383,10 +383,13 @@
                 return data;
             }
             var unit;
+            var startDt;
            {%for sensor_data in sensor_data_list|slice:":1" %}
            unit = "{{sensor_data.sensor.sensor_type.unit|escapejs}}";
+           startDt = "{{sensor_data.sensor_data_dateTime|escapejs}}";
             {% endfor %}
             console.log(unit);
+            console.log(startDt);
 
             function initChart() {
                 var timeFormat = d3.time.format.iso;
@@ -429,24 +432,37 @@
                         return d.value;
                     })]),
                     xAxis = d3.svg.axis()
-                        .scale(xScale).orient("bottom").ticks(10).tickFormat(function (d) {
-
-
-                            return moment(d).utcOffset(timezoneOffset).format('HH:mm:ss');
+                        .scale(xScale).orient("bottom")
+                        .ticks(10).tickFormat(function (d) {
+                            return moment(d).utcOffset(timezoneOffset).format('HH:mm');
                         }),
                     yAxis = d3.svg.axis()
                         .scale(yScale)
                         .orient("left");
 
-                vis.append("svg:g")
+                var xAxisStyle = vis.append("svg:g")
                     .attr("class", "x axis")
                     .attr("transform", "translate(0," + (HEIGHT - MARGINS.bottom) + ")")
-
                     .call(xAxis);
-                vis.append("svg:g")
+
+                 xAxisStyle.selectAll("path")
+                .style({ 'stroke': 'black', 'fill': 'none', 'stroke-width': '1px'});
+
+
+                 vis.append("text")
+                      .attr("x", WIDTH + 20)
+                      .attr("y",  470 )
+                      .style("text-anchor", "end")
+                      .text(moment(startDt).utcOffset(timezoneOffset).format('MMM DD, YYYY'));
+
+                var yAxisStyle = vis.append("svg:g")
                     .attr("class", "y axis")
                     .attr("transform", "translate(" + (MARGINS.left) + ",0)")
-                    .call(yAxis).append("text")
+                    .call(yAxis);
+                 yAxisStyle.selectAll("path")
+                .style({ 'stroke': 'black', 'fill': 'none', 'stroke-width': '1px'});
+
+                 yAxisStyle.append("text")
                       .attr("transform", "rotate(-90)")
                       .attr("y", 6)
                       .attr("dy", ".71em")
