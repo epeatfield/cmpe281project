@@ -37,7 +37,7 @@ class Station(models.Model):
     REQUIRED_FIELDS = ('station_name', 'us_state_cd', 'longitude', 'latitude')
 
     def __str__(self):
-        return self.station_name
+        return self.station_short_name
 
     def natural_key(self):
         return self.station_name
