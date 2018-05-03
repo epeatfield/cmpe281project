@@ -6,44 +6,40 @@
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <style>
-    .textarea {
-    height: 200px;
-    width: 50%;
-    background-color: powderblue;
-}
+
 </style>
-<form method="get">
-    <div class="well">
-        <h4 style="margin-top: 0">Filter</h4>
-        <div class="row">
-
-            <div class="form-group col-sm-8 col-md-6">
-
-
-
-                   {%for field in filter.form%}
-                    <h4>
-                    {{ field.label_tag }}
-                    {{ field }}
-                    </h4>
-
-                    {% endfor %}
-
+<div class = 'station_search' style="display: flex">
+    <div class = 'search_form'>
+        <form method="get">
+            <div class="well" style="width: 500px; height: 350px;">
+                <div class="row">
+                    <div class="form-group col-sm-8 col-md-6">
+                           {%for field in filter.form%}
+                            <h4>
+                            {{ field.label_tag }}
+                            {{ field }}
+                            </h4>
+                            {% endfor %}
+                    </div>
+                </div>
+                <button type="submit" class="btn btn-primary">
+                    <span class="glyphicon glyphicon-search"></span> Search
+                </button>
             </div>
-        </div>
-        <button type="submit" class="btn btn-primary">
-            <span class="glyphicon glyphicon-search"></span> Search
-        </button>
+        </form>
     </div>
-</form>
+    <div class ='station_near'>
+        <span></span><h3>Stations near you</h3>
+        <ul>
+            {% for station in stations %}
+         <li><b>{{ station.station_name }}</b>: status: {{ station.current_status }}</li>
+        {% endfor %}
+        </ul>
+
+    </div>
 
 
-<h2>Stations near you</h2>
-<ul>
-    {% for station in stations %}
-    <li><b>{{ station.station_name }}</b>: status: {{ station.current_status }}</li>
-    {% endfor %}
-</ul>
+</div>
 
 
 
@@ -107,15 +103,17 @@
 
          function addClickEventToDisplayText(marker, message) {
             marker.addListener('click', function() {
-              // document.getElementById("text").innerText = message;
                 $('#text').html(message);
             });
          }
      }
      google.maps.event.addDomListener(window, 'load', initialize);
    </script>
-<div id="map" style="width: 600px; height: 600px;"></div>
-<div class="textarea" id="text" contenteditable="true"></div>
+<div class = 'station_map' style="display: flex">
+    <div id="map" style="width: 600px; height: 500px;"></div>
+    <div id="text" contenteditable="true" style="width: 50%; height: 500px;  background-color: powderblue"></div>
+</div>
+
 
 {% endblock %}
 
