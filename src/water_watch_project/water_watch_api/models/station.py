@@ -33,11 +33,13 @@ class Station(models.Model):
 
     gis = gis_models.GeoManager()
 
-
     REQUIRED_FIELDS = ('station_name', 'us_state_cd', 'longitude', 'latitude')
 
     def __str__(self):
-        return self.station_short_name
+        if self.station_short_name:
+            return self.station_short_name
+        else:
+            return self.station_name
 
     def natural_key(self):
         return self.station_name
