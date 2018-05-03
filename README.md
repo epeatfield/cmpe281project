@@ -165,6 +165,9 @@ sudo apt install postgis
 psql <db name>  or use: sudo -u postgres psql
 > CREATE EXTENSION postgis;   
 
+##21) Station short name
+I create a new field called station short name to save a short name of station name (which is long) so that the UI is not broken. Please run python manage.py migrate after you get the latest code.  
+Then go to admin page, add short station name for every station you have, name it as short as 2 words. If you get any problem when viewing admin station page, station map page, and dashboar page please let me know immediately.  
 
 
 
