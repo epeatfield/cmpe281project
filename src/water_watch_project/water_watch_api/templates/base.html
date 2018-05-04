@@ -84,7 +84,7 @@
           <h3>  <li><a href="{% url 'logout' %}"><span class="glyphicon glyphicon-log-in"></span><font color = #ffffcc> Sign Out </font></a></li></h3>
           {% else %}
 
-         <li><a href="{%url 'login'%}">Sign In</a></li>
+         <li><a href="{%url 'login'%}?next={{ request.get_full_path|urlencode }}">Sign In</a></li>
           <li><a href="{%url 'signup'%}">New?</a></li>
 
           {% endif %}
