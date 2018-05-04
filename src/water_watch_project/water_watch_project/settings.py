@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['water-watch-project-dev.us-west-2.elasticbeanstalk.com', 'loca
 
 EC2_PRIVATE_IP = None
 try:
-    EC2_PRIVATE_IP  =   requests.get('http://169.254.169.254/latest/meta-data/local-ipv4', timeout = 0.01).text
+    EC2_PRIVATE_IP =  requests.get('http://169.254.169.254/latest/meta-data/local-ipv4', timeout = 0.01).text
 except requests.exceptions.RequestException:
     pass
 
