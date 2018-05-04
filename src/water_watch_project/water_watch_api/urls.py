@@ -8,7 +8,7 @@ router = DefaultRouter()
 
 urlpatterns = [
     url(r'^$', views.HomePageView.as_view(), name='home'),
-    url(r'station_map/$', views.StationMapView.as_view(), name='stationmap'),
+    url(r'station_map/$', views.StationMapView.as_view(), name='station_map'),
     url(r'dashboard/$', views.DashboardSensorDataView.as_view(), name='dashboard'),
     url(r'home/$', views.HomePageView.as_view(), name='home'),
     url(r'sensor_data/$', views.SensorDataListCreateView.as_view()),
