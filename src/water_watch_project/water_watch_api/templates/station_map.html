@@ -63,8 +63,8 @@
       "</br>Lattitude: " + "{{ station.latitude}} " + "and longitude: " + "{{ station.longitude }}" + "</br>";
     console.log("in function: " + str);
     infoWindowMessage.push(str);
-    var str1 = "<p>Station name: " + "{{ station.station_name }}" +
-      "</p></br>List of supported sensors in this station:</br>";
+    var str1 = "<p><h4>Station name:</h4> " + "{{ station.station_name }}" +
+      "</p></br><h4>List of supported sensors in this station:</h4></br>";
 
     // console.log("{{station.get_sensor_data_set}}");  // console.log("{{station.get_sensor_data_set}}");
     {%for sensor in station.get_sensor_data_set %}

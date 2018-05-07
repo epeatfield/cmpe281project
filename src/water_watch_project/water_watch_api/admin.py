@@ -11,7 +11,7 @@ class StationAdmin(admin.ModelAdmin):
 
     actions = ['download_csv']
     list_filter = ['us_state_cd']
-    list_display = ('id', 'station_name', 'us_state_cd', 'longitude', 'latitude')
+    list_display = ('id', 'station_name', 'us_state_cd', 'longitude', 'latitude', 'current_status')
 
     def download_csv(self, request, queryset):
         import csv
@@ -20,7 +20,7 @@ class StationAdmin(admin.ModelAdmin):
 
         f = io.StringIO()
         writer = csv.writer(f)
-        writer.writerow(["id", "station", "state", "longitude", "latitude"])
+        writer.writerow(["id", "station", "state", "longitude", "latitude", "current_status"])
 
         for s in queryset:
             writer.writerow([s.usgs_site_code, s.station_name, s.us_state_cd, s.longitude, s.latitude])
