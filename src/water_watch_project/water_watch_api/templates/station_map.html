@@ -1,42 +1,41 @@
+ {% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
 
-{% extends 'base.html' %}
-{% load widget_tweaks %}
-{% block content %}
 <head>
-<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 </head>
 <style>
-
 </style>
-<div class = 'station_search' style="display: flex">
-    <div class = 'search_form'>
-        <form method="get">
-            <div class="well" style="width: 500px; height: 350px;">
-                <div class="row">
-                    <div class="form-group col-sm-8 col-md-6">
-                           {%for field in filter.form%}
-                            <h4>
+<div class='station_search' style="display: flex">
+  <div class='search_form' style="width: 600px">
+    <form method="get">
+      <div class="well" style="width: 500px; height: 400px;">
+        <div class="row">
+          <div class="form-group col-sm-8 col-md-6">
+            {%for field in filter.form%}
+            <h4>
                             {{ field.label_tag }}
+                            <br>
                             {{ field }}
-                            </h4>
-                            {% endfor %}
-                    </div>
-                </div>
-                <button type="submit" class="btn btn-primary">
+                            <br>
+                            </h4> {% endfor %}
+          </div>
+        </div>
+        <button type="submit" class="btn btn-primary">
                     <span class="glyphicon glyphicon-search"></span> Search
                 </button>
-            </div>
-        </form>
-    </div>
-    <div class ='station_near'>
-        <span></span><h3>Stations near you</h3>
-        <ul>
-            {% for station in stations %}
-         <li><b>{{ station.station_name }}</b>: status: {{ station.current_status }}</li>
-        {% endfor %}
-        </ul>
+      </div>
+    </form>
+  </div>
+  <div class='station_near'>
+    <span></span>
+    <h3>Stations near you</h3>
+    <ul>
+      {% for station in stations %}
+      <li><b>{{ station.station_name }}</b><br> Status: {{ station.current_status }}<br><br></li>
+      {% endfor %}
+    </ul>
 
-    </div>
+  </div>
 </div>
 
 
@@ -45,73 +44,79 @@
 <script type="text/javascript" src="http://maps.google.com/maps/api/js?key=AIzaSyBL5m8DxAJiMe2NtiJHdeYxWwW-fuy6L9M"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js"></script>
 <script>
-     function initialize() {
-       var prop = {
-        center:new google.maps.LatLng(34.0522,-118.2437),
-        zoom:7,
-        mapTypeId:google.maps.MapTypeId.ROADMAP
-       };
-        var map=new google.maps.Map(document.getElementById("map"), prop);
-        var infoWindowMessage = [];
-        var textboxMessage = [];
+  function initialize() {
+    var prop = {
+      center: new google.maps.LatLng(34.0522, -118.2437),
+      zoom: 7,
+      mapTypeId: google.maps.MapTypeId.ROADMAP
+    };
+    var map = new google.maps.Map(document.getElementById("map"), prop);
+    var infoWindowMessage = [];
+    var textboxMessage = [];
 
-         {% for station in stations %}
-            var str = "<p>Station name: " + "{{ station.station_name }}"
-                        + "</br>Lattitude: " + "{{ station.latitude}} " + "and longitude: " + "{{ station.longitude }}" + "</br>";
-                    console.log ("in function: " + str);
-            infoWindowMessage.push(str);
-            var str1 = "<p>Station name: " + "{{ station.station_name }}"
-                        + "</p></br>List of supported sensors in this station:</br>";
+    { %
+      for station in stations %
+    }
+    var str = "<p>Station name: " + "{{ station.station_name }}" +
+      "</br>Lattitude: " + "{{ station.latitude}} " + "and longitude: " + "{{ station.longitude }}" + "</br>";
+    console.log("in function: " + str);
+    infoWindowMessage.push(str);
+    var str1 = "<p>Station name: " + "{{ station.station_name }}" +
+      "</p></br>List of supported sensors in this station:</br>";
 
-            // console.log("{{station.get_sensor_data_set}}");  // console.log("{{station.get_sensor_data_set}}");
-            {%for sensor in station.get_sensor_data_set%}
-                str1 +=  "<p>" + "{{sensor.sensor_type.sensor_type_name|safe|escapejs}}"  + "</p>" ;
-            {%endfor%}
-            textboxMessage.push(str1);
-         {% endfor %}
-         console.log(textboxMessage);
-         var i = 0;
-         {% for station in stations %}
+    // console.log("{{station.get_sensor_data_set}}");  // console.log("{{station.get_sensor_data_set}}");
+    { %
+      for sensor in station.get_sensor_data_set %
+    }
+    str1 += "<p>" + "{{sensor.sensor_type.sensor_type_name|safe|escapejs}}" + "</p>"; { % endfor %
+    }
+    textboxMessage.push(str1); { % endfor %
+    }
+    console.log(textboxMessage);
+    var i = 0; { %
+      for station in stations %
+    }
 
-            latlng = new google.maps.LatLng("{{ station.location.y }}", "{{ station.location.x }}");
+    latlng = new google.maps.LatLng("{{ station.location.y }}", "{{ station.location.x }}");
 
-            var marker = new google.maps.Marker({
-                position: latlng,
-                map: map,
-                title:"{{ station.station_name }}"
+    var marker = new google.maps.Marker({
+      position: latlng,
+      map: map,
+      title: "{{ station.station_name }}"
 
-            });
-            attachInfoWindow(marker, infoWindowMessage[i]);
-            addClickEventToDisplayText(marker, textboxMessage[i]);
-            i++;
+    });
+    attachInfoWindow(marker, infoWindowMessage[i]);
+    addClickEventToDisplayText(marker, textboxMessage[i]);
+    i++;
 
-        {% endfor %}
-        function attachInfoWindow(marker, message) {
-            var infowindow = new google.maps.InfoWindow({
-              content: message
-            });
+    { % endfor %
+    }
 
-            marker.addListener('mouseover', function() {
-              infowindow.open(marker.get('map'), marker);
-            });
-             marker.addListener('mouseout', function() {
-              infowindow.close(marker.get('map'), marker);
-            });
-        }
+    function attachInfoWindow(marker, message) {
+      var infowindow = new google.maps.InfoWindow({
+        content: message
+      });
 
-         function addClickEventToDisplayText(marker, message) {
-            marker.addListener('click', function() {
-                $('#text').html(message);
-            });
-         }
-     }
-     google.maps.event.addDomListener(window, 'load', initialize);
-   </script>
-<div class = 'station_map' style="display: flex">
-    <div id="map" style="width: 600px; height: 500px;"></div>
-    <div id="text" contenteditable="true" style="width: 50%; height: 500px;  background-color: powderblue"></div>
+      marker.addListener('mouseover', function() {
+        infowindow.open(marker.get('map'), marker);
+      });
+      marker.addListener('mouseout', function() {
+        infowindow.close(marker.get('map'), marker);
+      });
+    }
+
+    function addClickEventToDisplayText(marker, message) {
+      marker.addListener('click', function() {
+        $('#text').html(message);
+      });
+    }
+  }
+  google.maps.event.addDomListener(window, 'load', initialize);
+</script>
+<div class='station_map' style="display: flex">
+  <div id="map" style="width: 650px; height: 500px;"></div>
+  <div id="text" contenteditable="true" style="width: 50%; height: 400px;  background-color: #e6ffe6"></div>
 </div>
 
 
 {% endblock %}
-

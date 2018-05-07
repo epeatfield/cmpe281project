@@ -22,6 +22,45 @@
     padding-left: 20px;
     padding-right: 20px;
   }
+
+  ul {
+    padding-top: 20px;
+  }
+
+  #dropdown #list_dropdown a {
+    text-decoration: none;
+    color: white;
+    display: block;
+  }
+
+  #dropdown #list_dropdown a:hover {
+    background-color: green;
+  }
+
+  #dropdown {
+    margin: 0px;
+    padding: 0px;
+    list-style: none;
+  }
+
+  #dropdown #list_dropdown #dropdown2 #list_dropdown {
+    display: none;
+  }
+
+  #dropdown #list_dropdown:hover #dropdown2 #list_dropdown {
+    display: block;
+  }
+
+  #dropdown #list_dropdown {
+    float: left;
+    width: 200px;
+    height: 40px;
+    background-color: black;
+    opacity: 1;
+    line-height: 40px;
+    text-align: center;
+    font-size: 20px;
+  }
 </style>
 
 <body link="orange">
@@ -35,7 +74,7 @@
      </button>
         <a class="navbar-brand" href="{% url 'home' %}">
           <font color=#ffffcc>
-            <h1>Water Watch Project</font></h1>
+            <h1>Spartan Aquatics</font></h1>
             <br>
         </a>
       </div>
@@ -43,8 +82,16 @@
       </div>
     </div>
   </nav>
+  <div>
+    <br>
+    <ul id="dropdown">
+      <li id="list_dropdown">
+        <a href="{{request.scheme}}://{{ request.META.HTTP_HOST }}/dashboard">Dashboard</a>
+      </li>
+    </ul>
+    <!-- </li> -->
 
-
+  </div>
   <div class="container-fluid">
     <center>
       <br>
