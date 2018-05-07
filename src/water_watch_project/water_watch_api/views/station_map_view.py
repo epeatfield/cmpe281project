@@ -50,7 +50,7 @@ class StationMapView(FilterView):
                 longitude = self.kwargs['longitude']
                 latitude = self.kwargs['longitude']
                 current_point = geos.fromstr("POINT(%s %s)" % (longitude, latitude))
-                distance_from_point = {'km': 10}
+                distance_from_point = {'km': 32.1869}
                 query = query.gis.filter(location__distance_lte=(current_point, measure.D(**distance_from_point)))
                 query = query.distance(current_point).order_by('distance')
         return query
