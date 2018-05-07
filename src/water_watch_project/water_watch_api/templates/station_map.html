@@ -1,4 +1,6 @@
- {% extends 'base.html' %} {% load widget_tweaks %} {% block content %}
+{% extends 'base.html' %}
+{% load widget_tweaks %}
+{% block content %}
 
 <head>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
@@ -17,7 +19,9 @@
                             <br>
                             {{ field }}
                             <br>
-                            </h4> {% endfor %}
+                            </h4>
+
+              {% endfor %}
           </div>
         </div>
         <button type="submit" class="btn btn-primary">
@@ -54,9 +58,7 @@
     var infoWindowMessage = [];
     var textboxMessage = [];
 
-    { %
-      for station in stations %
-    }
+    {%for station in stations %}
     var str = "<p>Station name: " + "{{ station.station_name }}" +
       "</br>Lattitude: " + "{{ station.latitude}} " + "and longitude: " + "{{ station.longitude }}" + "</br>";
     console.log("in function: " + str);
@@ -65,17 +67,14 @@
       "</p></br>List of supported sensors in this station:</br>";
 
     // console.log("{{station.get_sensor_data_set}}");  // console.log("{{station.get_sensor_data_set}}");
-    { %
-      for sensor in station.get_sensor_data_set %
-    }
-    str1 += "<p>" + "{{sensor.sensor_type.sensor_type_name|safe|escapejs}}" + "</p>"; { % endfor %
-    }
-    textboxMessage.push(str1); { % endfor %
-    }
+    {%for sensor in station.get_sensor_data_set %}
+    str1 += "<p>" + "{{sensor.sensor_type.sensor_type_name|safe|escapejs}}" + "</p>";
+    {% endfor %}
+    textboxMessage.push(str1);
+    {% endfor %}
     console.log(textboxMessage);
-    var i = 0; { %
-      for station in stations %
-    }
+    var i = 0;
+    {%for station in stations %}
 
     latlng = new google.maps.LatLng("{{ station.location.y }}", "{{ station.location.x }}");
 
@@ -89,8 +88,8 @@
     addClickEventToDisplayText(marker, textboxMessage[i]);
     i++;
 
-    { % endfor %
-    }
+    {% endfor %}
+    
 
     function attachInfoWindow(marker, message) {
       var infowindow = new google.maps.InfoWindow({
