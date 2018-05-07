@@ -85,7 +85,9 @@
 
   <!--</script>-->
   <br> {% if user.is_authenticated %}
-  <h2>Welcome, {{ user.username }}</h2> {% endif %} {% block content %}
+  <h2>Welcome, {{ user.username }}</h2>
+  {% endif %}
+  {% block content %}
   <div id='dashboard'>
 
     <div class='bubble_container' style='display: flex'>
@@ -406,36 +408,25 @@
         <script src="https://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
         <script>
           function buildDataObject() {
-            var data = []; { %
-              for sensor_data in sensor_data_list %
-            }
+            var data = [];
+            {% for sensor_data in sensor_data_list %}
             var dataObject = {};
-            dataObject.sensorId = {
-              {
-                sensor_data.sensor.id
-              }
-            };
-            dataObject.value = {
-              {
-                sensor_data.sensor_data_value
-              }
-            };
+            dataObject.sensorId = {{sensor_data.sensor.id}};
+            dataObject.value = {{sensor_data.sensor_data_value}};
             dataObject.datetime = "{{sensor_data.sensor_data_dateTime.isoformat|safe|escapejs}}";
             dataObject.station = "{{sensor_data.sensor.station.station_short_name|escapejs}}";
             dataObject.sensor_type = "{{sensor_data.sensor.sensor_type.sensor_type_name|escapejs}}";
             data.push(dataObject);
 
-            { % endfor %
-            }
+            {% endfor %}
             return data;
           }
           var unit;
-          var startDt; { %
-            for sensor_data in sensor_data_list | slice: ":1" %
-          }
+          var startDt;
+          {% for sensor_data in sensor_data_list|slice:":1" %}
           unit = "{{sensor_data.sensor.sensor_type.unit|escapejs}}";
-          startDt = "{{sensor_data.sensor_data_dateTime|escapejs}}"; { % endfor %
-          }
+          startDt = "{{sensor_data.sensor_data_dateTime|escapejs}}";
+          {% endfor %}
           console.log(unit);
           console.log(startDt);
 
